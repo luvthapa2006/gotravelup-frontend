@@ -68,6 +68,7 @@
                     body: JSON.stringify({ username, password })
                 });
 
+                
                 const data = await res.json();
                 document.getElementById('signinSpinner').classList.add('d-none');
 
