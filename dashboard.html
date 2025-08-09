@@ -407,21 +407,31 @@
             }
         }
 
-        async function loadTrips() {
-            try {
-                const response = await fetch(`${API_BASE}/api/trips`, {
-                    method: 'GET',
-                    credentials: 'include' // Include cookies for session management
-                });
-                const data = await response.json();
-                
-                if (data.success) {
-                    displayTrips(data.trips);
-                }
-            } catch (error) {
-                console.error('Error loading trips:', error);
-            }
+// In dashboard.html
+
+async function loadTrips() {
+    try {
+        const response = await fetch(`${API_BASE}/api/trips`, {
+            method: 'GET',
+            credentials: 'include'
+        });
+
+        if (!response.ok) {
+            // Handle cases where the server returns an error
+            throw new Error(`HTTP error! Status: ${response.status}`);
         }
+
+        const tripsArray = await response.json(); // The response IS the array of trips
+        
+        // Directly pass the array to the display function
+        displayTrips(tripsArray);
+
+    } catch (error) {
+        console.error('Error loading trips:', error);
+        // Optionally, display an error message to the user
+        document.getElementById('tripsContainer').innerHTML = '<p class="text-center text-danger">Could not load trips. Please try refreshing the page.</p>';
+    }
+}
 
         function displayTrips(trips) {
             const container = document.getElementById('tripsContainer');
