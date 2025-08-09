@@ -64,7 +64,6 @@
         const data = await res.json();
 
         if (res.ok) {
-          alert("Login successful!");
           window.location.href = "dashboard.html"; // ✅ Go straight to dashboard
         } else {
           alert(data.message || "Login failed");
