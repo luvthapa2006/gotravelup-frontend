@@ -433,45 +433,50 @@
             });
         }
 
-        function createTripCard(trip) {
-            const col = document.createElement('div');
-            col.className = 'col-md-6 col-lg-4';
-            
-            const discount = Math.round(((trip.originalPrice - trip.salePrice) / trip.originalPrice) * 100);
-            
-            col.innerHTML = `
-                <div class="trip-card">
-                    <div class="trip-image">
-                        <img src="${trip.image}" alt="${trip.destination}">
-                        <div class="trip-badge">
-                            <span class="badge bg-success">${discount}% OFF</span>
-                        </div>
-                    </div>
-                    <div class="trip-content">
-                        <h5 class="trip-title">${trip.destination}</h5>
-                        <p class="trip-date">
-                            <i class="fas fa-calendar me-1"></i> ${trip.date}
-                        </p>
-                        <p class="trip-description">${trip.description}</p>
-                        <div class="trip-pricing">
-                            <span class="original-price">₹${trip.originalPrice}</span>
-                            <span class="sale-price">₹${trip.salePrice}</span>
-                        </div>
-                        <button class="btn btn-primary w-100 mt-3" onclick="bookTrip(${trip.id})">
-                            <i class="fas fa-check me-1"></i> Book Now
-                        </button>
-                    </div>
-                </div>
-            `;
-            
-            return col;
-        }
+// In dashboard.html
 
-        async function loadMyTrips() {
-            try {
-                const response = await fetch(`${API_BASE}/api/my-trips`, {
-                    method: 'GET',
-                    credentials: 'include' // Include cookies for session management
+function createTripCard(trip) {
+    const col = document.createElement('div');
+    col.className = 'col-md-6 col-lg-4';
+    
+    const discount = Math.round(((trip.originalPrice - trip.salePrice) / trip.originalPrice) * 100);
+    
+    // ✅ Create the full image URL by prepending the backend URL
+    const imageUrl = `${API_BASE}${trip.image}`;
+            
+    col.innerHTML = `
+        <div class="trip-card">
+            <div class="trip-image">
+                <img src="${imageUrl}" alt="${trip.destination}">
+                <div class="trip-badge">
+                    <span class="badge bg-success">${discount}% OFF</span>
+                </div>
+            </div>
+            <div class="trip-content">
+                <h5 class="trip-title">${trip.destination}</h5>
+                <p class="trip-date">
+                    <i class="fas fa-calendar me-1"></i> ${new Date(trip.date).toDateString()}
+                </p>
+                <p class="trip-description">${trip.description}</p>
+                <div class="trip-pricing">
+                    <span class="original-price">₹${trip.originalPrice}</span>
+                    <span class="sale-price">₹${trip.salePrice}</span>
+                </div>
+                <button class="btn btn-primary w-100 mt-3" onclick="bookTrip(${trip._id})">
+                    <i class="fas fa-check me-1"></i> Book Now
+                </button>
+            </div>
+        </div>
+    `;
+    
+    return col;
+}
+
+async function loadMyTrips() {
+    try {
+        const response = await fetch(`${API_BASE}/api/my-trips`, {
+            method: 'GET',
+            credentials: 'include' // Include cookies for session management
                 });
                 const data = await response.json();
                 
