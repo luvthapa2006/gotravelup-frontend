@@ -536,7 +536,10 @@
 
         function bookTrip(tripId) {
             // Find the trip details
-            fetch('/api/trips')
+            fetch('/api/trips', {
+                method: 'GET',
+                credentials: 'include'
+            })
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
