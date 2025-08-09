@@ -11,10 +11,6 @@ class AuthManager {
     }
 
     init() {
-        // Check authentication status for dashboard
-        if (window.location.pathname.includes('dashboard.html')) {
-            this.checkAuthStatus();
-        }
 
         // Signup form
         const signupForm = document.getElementById('signupForm');
