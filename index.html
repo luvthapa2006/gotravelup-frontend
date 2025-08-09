@@ -189,43 +189,44 @@
     const API_BASE = "https://gotravelup-backend.onrender.com";
 
     // Check authentication status and update UI
-    async function checkAuthAndUpdateUI() {
-        try {
-            const response = await fetch(`${API_BASE}/api/profile`, {
-                method: "GET",
-                credentials: "include" // So cookies/sessions work
-            });
+async function checkAuthAndUpdateUI() {
+    // ✅ FIX: Check if the user just came from the signin or signup page.
+    if (document.referrer.includes("signin.html") || document.referrer.includes("signup.html")) {
+        // If they did, don't do anything. Let them proceed to the dashboard.
+        return;
+    }
 
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
+    try {
+        const response = await fetch(`${API_BASE}/api/profile`, {
+            method: "GET",
+            credentials: "include"
+        });
 
-            const data = await response.json();
-
-            if (data.success) {
-                // User is logged in
-                document.getElementById('signupBtn').classList.add('d-none');
-                document.getElementById('signinBtn').classList.add('d-none');
-                document.getElementById('dashboardBtn').classList.remove('d-none');
-                document.getElementById('heroSignupBtn').classList.add('d-none');
-                document.getElementById('heroDashboardBtn').classList.remove('d-none');
-            } else {
-                // User is not logged in
-                document.getElementById('signupBtn').classList.remove('d-none');
-                document.getElementById('signinBtn').classList.remove('d-none');
-                document.getElementById('dashboardBtn').classList.add('d-none');
-                document.getElementById('heroSignupBtn').classList.remove('d-none');
-                document.getElementById('heroDashboardBtn').classList.add('d-none');
-            }
-        } catch (error) {
-            console.error('Auth check failed:', error);
+        if (response.ok) {
+            // User is logged in
+            document.getElementById('signupBtn').classList.add('d-none');
+            document.getElementById('signinBtn').classList.add('d-none');
+            document.getElementById('dashboardBtn').classList.remove('d-none');
+            document.getElementById('heroSignupBtn').classList.add('d-none');
+            document.getElementById('heroDashboardBtn').classList.remove('d-none');
+        } else {
+            // User is not logged in
             document.getElementById('signupBtn').classList.remove('d-none');
             document.getElementById('signinBtn').classList.remove('d-none');
             document.getElementById('dashboardBtn').classList.add('d-none');
             document.getElementById('heroSignupBtn').classList.remove('d-none');
             document.getElementById('heroDashboardBtn').classList.add('d-none');
         }
+    } catch (error) {
+        console.error('Auth check failed:', error);
+        // Default to not logged in state on error
+        document.getElementById('signupBtn').classList.remove('d-none');
+        document.getElementById('signinBtn').classList.remove('d-none');
+        document.getElementById('dashboardBtn').classList.add('d-none');
+        document.getElementById('heroSignupBtn').classList.remove('d-none');
+        document.getElementById('heroDashboardBtn').classList.add('d-none');
     }
+}
 
     // Run on page load
     document.addEventListener('DOMContentLoaded', checkAuthAndUpdateUI);
