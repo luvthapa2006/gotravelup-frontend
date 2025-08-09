@@ -108,7 +108,8 @@ class AuthManager {
             }
 
             // Submit to server
-            const response = await fetch('/api/register', {
+            const API_BASE = 'https://gotravelup-backend.onrender.com';
+            const response = await fetch(`${API_BASE}/api/register`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -178,7 +179,7 @@ class AuthManager {
                 return;
             }
 
-            const response = await fetch('/api/login', {
+            const response = await fetch(`${API_BASE}/api/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -255,7 +256,7 @@ class AuthManager {
 
     async checkAuthStatus() {
         try {
-            const response = await fetch('/api/profile');
+            const response = await fetch(`${API_BASE}/api/profile`);
             const data = await response.json();
             
             if (data.success) {
@@ -424,7 +425,7 @@ class AuthManager {
         }
 
         try {
-            const response = await fetch('/api/validate-referral', {
+            const response = await fetch(`${API_BASE}/api/validate-referral`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -463,7 +464,7 @@ class AuthManager {
 
     async logout() {
         try {
-            const response = await fetch('/api/logout', { method: 'POST' });
+            const response = await fetch(`${API_BASE}/api/logout`, { method: 'POST' });
             const data = await response.json();
             
             if (data.success) {

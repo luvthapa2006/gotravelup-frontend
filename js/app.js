@@ -240,7 +240,7 @@ const GoodToGo = {
 
     // API helper functions
     api: {
-        baseUrl: '/api',
+        baseUrl: 'https://gotravelup-backend.onrender.com',
 
         async request(endpoint, options = {}) {
             const url = `${this.baseUrl}${endpoint}`;
