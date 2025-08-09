@@ -3,7 +3,7 @@
 // =============================
 
 // Change this if backend URL changes
-const API_BASE = 'https://gotravelup-backend.onrender.com/api';
+const API_BASE = 'https://gotravelup-backend.onrender.com';
 
 class AuthManager {
     constructor() {
@@ -53,7 +53,7 @@ class AuthManager {
         }
 
         try {
-            const res = await fetch(`${API_BASE}/register`, {
+            const res = await fetch(`${API_BASE}/api/register`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 credentials: 'include',
@@ -86,7 +86,7 @@ class AuthManager {
         const data = Object.fromEntries(formData.entries());
 
         try {
-            const res = await fetch(`${API_BASE}/login`, {
+            const res = await fetch(`${API_BASE}/api/login`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 credentials: 'include',
@@ -112,7 +112,7 @@ class AuthManager {
     // =============================
     async checkAuthStatus() {
         try {
-            const res = await fetch(`${API_BASE}/profile`, {
+            const res = await fetch(`${API_BASE}/api/profile`, {
                 method: 'GET',
                 credentials: 'include'
             });
@@ -144,7 +144,7 @@ class AuthManager {
         if (!code) return;
 
         try {
-            const res = await fetch(`${API_BASE}/validate-referral`, {
+            const res = await fetch(`${API_BASE}/api/validate-referral`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 credentials: 'include',
