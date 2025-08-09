@@ -373,7 +373,10 @@
 
         async function loadUserProfile() {
             try {
-                const response = await fetch('/api/profile');
+                const response = await fetch('/api/profile', {
+                    method: 'GET',
+                    credentials: 'include' // Include cookies for session management
+                });
                 const data = await response.json();
                 
                 if (data.success) {
@@ -405,7 +408,10 @@
 
         async function loadTrips() {
             try {
-                const response = await fetch('/api/trips');
+                const response = await fetch('/api/trips', {
+                    method: 'GET',
+                    credentials: 'include' // Include cookies for session management
+                });
                 const data = await response.json();
                 
                 if (data.success) {
@@ -462,7 +468,10 @@
 
         async function loadMyTrips() {
             try {
-                const response = await fetch('/api/my-trips');
+                const response = await fetch('/api/my-trips', {
+                    method: 'GET',
+                    credentials: 'include' // Include cookies for session management
+                });
                 const data = await response.json();
                 
                 if (data.success) {
@@ -541,6 +550,7 @@
                 .catch(error => {
                     console.error('Error loading trip details:', error);
                     alert('Error loading trip details. Please try again.');
+                    credentials: 'include';
                 });
         }
 
@@ -654,6 +664,7 @@
             try {
                 const response = await fetch('/api/book-trip', {
                     method: 'POST',
+                    credentials: 'include',
                     headers: {
                         'Content-Type': 'application/json'
                     },
@@ -704,6 +715,7 @@
             try {
                 const response = await fetch('/api/wallet/add', {
                     method: 'POST',
+                    credentials: 'include',
                     headers: {
                         'Content-Type': 'application/json'
                     },
@@ -768,7 +780,7 @@
 
         async function signOut() {
             try {
-                const response = await fetch('/api/logout', { method: 'POST' });
+                const response = await fetch('/api/logout', { method: 'POST', credentials: 'include' });
                 const data = await response.json();
                 
                 if (data.success) {
@@ -782,7 +794,7 @@
         async function deleteAccount() {
             if (confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
                 try {
-                    const response = await fetch('/api/account', { method: 'DELETE' });
+                    const response = await fetch('/api/account', { method: 'DELETE', credentials: 'include' });
                     const data = await response.json();
                     
                     if (data.success) {
