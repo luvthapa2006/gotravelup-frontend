@@ -445,15 +445,11 @@ async function loadTrips() {
 
 // In dashboard.html
 
-// In dashboard.html
-
 function createTripCard(trip) {
     const col = document.createElement('div');
     col.className = 'col-md-6 col-lg-4';
     
     const discount = Math.round(((trip.originalPrice - trip.salePrice) / trip.originalPrice) * 100);
-    
-    // ✅ Create the full image URL by prepending the backend URL
     const imageUrl = `${API_BASE}${trip.image}`;
             
     col.innerHTML = `
@@ -474,7 +470,7 @@ function createTripCard(trip) {
                     <span class="original-price">₹${trip.originalPrice}</span>
                     <span class="sale-price">₹${trip.salePrice}</span>
                 </div>
-                <button class="btn btn-primary w-100 mt-3" onclick="bookTrip(${trip._id})">
+                <button class="btn btn-primary w-100 mt-3" onclick="bookTrip('${trip._id}')">
                     <i class="fas fa-check me-1"></i> Book Now
                 </button>
             </div>
@@ -483,6 +479,8 @@ function createTripCard(trip) {
     
     return col;
 }
+
+
 
 async function loadMyTrips() {
     try {
