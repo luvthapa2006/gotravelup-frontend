@@ -409,26 +409,38 @@
 
 // In dashboard.html
 
+// In dashboard.html
+
 async function loadTrips() {
+    console.log("1. Starting to load trips...");
     try {
         const response = await fetch(`${API_BASE}/api/trips`, {
             method: 'GET',
             credentials: 'include'
         });
+        
+        console.log("2. Received response from server:", response);
 
         if (!response.ok) {
-            // Handle cases where the server returns an error
+            console.error("Fetch response was not OK.", response.status, response.statusText);
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
 
-        const tripsArray = await response.json(); // The response IS the array of trips
+        const tripsArray = await response.json();
         
-        // Directly pass the array to the display function
-        displayTrips(tripsArray);
+        console.log("3. Parsed JSON data:", tripsArray);
+        
+        if (Array.isArray(tripsArray) && tripsArray.length > 0) {
+            console.log("4. Data is a valid array with trips. Calling displayTrips...");
+            displayTrips(tripsArray);
+        } else {
+            console.log("4. Data is either not an array or is empty. Not displaying trips.");
+            // Display a message if no trips are found
+            document.getElementById('tripsContainer').innerHTML = '<p class="text-center text-muted">No upcoming trips found at the moment.</p>';
+        }
 
     } catch (error) {
-        console.error('Error loading trips:', error);
-        // Optionally, display an error message to the user
+        console.error('5. An error occurred in loadTrips:', error);
         document.getElementById('tripsContainer').innerHTML = '<p class="text-center text-danger">Could not load trips. Please try refreshing the page.</p>';
     }
 }
