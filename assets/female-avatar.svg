@@ -1,0 +1,47 @@
+<svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background Circle -->
+  <circle cx="40" cy="40" r="40" fill="#fce4ec"/>
+  
+  <!-- Head -->
+  <circle cx="40" cy="30" r="12" fill="#ffdbcb"/>
+  
+  <!-- Hair -->
+  <path d="M28 22 C28 16 32 14 40 14 C48 14 52 16 52 22 C52 24 50 26 48 28 L47 35 L33 35 L32 28 C30 26 28 24 28 22 Z" fill="#5d4037"/>
+  
+  <!-- Hair Details -->
+  <path d="M30 25 Q35 22 40 25 Q45 22 50 25" stroke="#4a2c2a" stroke-width="1" fill="none"/>
+  
+  <!-- Eyes -->
+  <circle cx="36" cy="28" r="2" fill="white"/>
+  <circle cx="44" cy="28" r="2" fill="white"/>
+  <circle cx="36" cy="28" r="1" fill="#333"/>
+  <circle cx="44" cy="28" r="1" fill="#333"/>
+  
+  <!-- Eyelashes -->
+  <path d="M34 26 L35 25" stroke="#333" stroke-width="0.5"/>
+  <path d="M37 25 L38 24" stroke="#333" stroke-width="0.5"/>
+  <path d="M42 24 L43 25" stroke="#333" stroke-width="0.5"/>
+  <path d="M45 25 L46 26" stroke="#333" stroke-width="0.5"/>
+  
+  <!-- Nose -->
+  <ellipse cx="40" cy="32" rx="1" ry="2" fill="#ffb49a"/>
+  
+  <!-- Mouth -->
+  <path d="M37 35 Q40 37 43 35" stroke="#e91e63" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+  
+  <!-- Body -->
+  <rect x="30" y="50" width="20" height="25" rx="10" fill="#e91e63"/>
+  
+  <!-- Arms -->
+  <circle cx="22" cy="55" r="8" fill="#ffdbcb"/>
+  <circle cx="58" cy="55" r="8" fill="#ffdbcb"/>
+  
+  <!-- Dress/Top Details -->
+  <path d="M32 50 L48 50 L46 46 L42 48 L38 48 L34 46 Z" fill="#c2185b"/>
+  <circle cx="35" cy="55" r="1" fill="#ad1457"/>
+  <circle cx="40" cy="58" r="1" fill="#ad1457"/>
+  <circle cx="45" cy="55" r="1" fill="#ad1457"/>
+  
+  <!-- Subtle Shadow -->
+  <ellipse cx="40" cy="75" rx="25" ry="3" fill="black" opacity="0.1"/>
+</svg>

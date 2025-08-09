@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - Good to Go</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet">
+</head>
+<body class="signup-body">
+    <!-- Header -->
+    <header class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="/">
+                <img src="assets/logo.svg" alt="Good to Go" width="40" height="40" class="me-2">
+                <span class="fw-bold">Good to Go</span>
+            </a>
+            <div class="navbar-nav ms-auto">
+                <a href="/" class="btn btn-outline-light">Back to Home</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Signup Form -->
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 col-xl-6">
+                <div class="signup-card">
+                    <div class="text-center mb-4">
+                        <h2 class="display-6 fw-bold text-primary">Join Good to Go</h2>
+                        <p class="text-muted">Create your account and start exploring!</p>
+                    </div>
+
+                    <form id="signupForm" novalidate>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="name" class="form-label">Full Name *</label>
+                                <input type="text" class="form-control" id="name" name="name" required>
+                                <div class="invalid-feedback">Please enter your full name.</div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="gender" class="form-label">Gender *</label>
+                                <select class="form-select" id="gender" name="gender" required>
+                                    <option value="">Select Gender</option>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                    <option value="other">Other</option>
+                                </select>
+                                <div class="invalid-feedback">Please select your gender.</div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="sapId" class="form-label">SAP ID *</label>
+                                <input type="text" class="form-control" id="sapId" name="sapId" placeholder="e.g., 500012345" required>
+                                <div class="invalid-feedback">Please enter your SAP ID.</div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="email" class="form-label">Email Address *</label>
+                                <input type="email" class="form-control" id="email" name="email" required>
+                                <div class="invalid-feedback">Please enter a valid email address.</div>
+                            </div>
+
+
+
+                            <div class="col-md-6">
+                                <label for="phone" class="form-label">Phone Number *</label>
+                                <input type="tel" class="form-control" id="phone" name="phone" placeholder="+91 9876543210" required>
+                                <div class="invalid-feedback">Please enter your phone number.</div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="username" class="form-label">Username *</label>
+                                <input type="text" class="form-control" id="username" name="username" placeholder="Choose a unique username" required>
+                                <div class="invalid-feedback">Please choose a username.</div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="password" class="form-label">Password *</label>
+                                <input type="password" class="form-control" id="password" name="password" required>
+                                <div class="invalid-feedback">Please create a password.</div>
+                            </div>
+
+                            <div class="col-12">
+                                <label for="referralCode" class="form-label">Referral Code (Optional)</label>
+                                <input type="text" class="form-control" id="referralCode" name="referralCode" placeholder="Enter referral code from a friend">
+                                <div class="form-text">Get bonus wallet credit when you enter a valid referral code! <small class="text-muted">(Try: UPES123456)</small></div>
+                                <div class="invalid-feedback" id="referralCodeError"></div>
+                            </div>
+                        </div>
+
+                        <!-- Terms and Conditions -->
+                        <div class="mt-4">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="termsAccepted" name="termsAccepted" required>
+                                <label class="form-check-label" for="termsAccepted">
+                                    I agree to the <button type="button" class="btn btn-link p-0 text-decoration-none" data-bs-toggle="modal" data-bs-target="#termsModal">Terms and Conditions</button> *
+                                </label>
+                                <div class="invalid-feedback">You must agree to the terms and conditions.</div>
+                            </div>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="d-grid mt-4">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <span class="spinner-border spinner-border-sm me-2 d-none" id="signupSpinner"></span>
+                                Create Account
+                            </button>
+                        </div>
+
+                        <!-- Login Link -->
+                        <div class="text-center mt-3">
+                            <p class="text-muted">Already have an account? <a href="#" class="text-primary text-decoration-none" id="loginLink">Sign In</a></p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Terms and Conditions Modal -->
+    <div class="modal fade" id="termsModal" tabindex="-1" aria-labelledby="termsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="termsModalLabel">Terms and Conditions</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h6>Good to Go - Terms and Conditions for UPES Students</h6>
+                    
+                    <p><strong>1. Travel Responsibility</strong></p>
+                    <p>By using Good to Go services, the traveller acknowledges and agrees that they are solely responsible for all travel costs, accommodation expenses, food charges, and any additional facilities during the trip. Good to Go acts as a facilitator and is not liable for any financial obligations during travel.</p>
+
+                    <p><strong>2. Safety and Conduct</strong></p>
+                    <p>Travellers must follow all safety guidelines provided by tour guides and maintain appropriate conduct throughout the journey. Any damage to property or inappropriate behavior may result in immediate termination of services without refund.</p>
+
+                    <p><strong>3. Booking and Cancellation</strong></p>
+                    <p>All bookings are subject to availability. Cancellations made 48 hours before the trip will receive a full refund. Cancellations within 48 hours will incur a 50% cancellation fee.</p>
+
+                    <p><strong>4. Health and Medical</strong></p>
+                    <p>Travellers are responsible for disclosing any medical conditions and ensuring they are physically fit for the activities. Good to Go is not responsible for any medical emergencies or health issues during travel.</p>
+
+                    <p><strong>5. Personal Belongings</strong></p>
+                    <p>Good to Go is not responsible for loss or damage to personal belongings. Travellers are advised to carry minimal valuables and ensure proper insurance for their items.</p>
+
+                    <p><strong>6. Weather Conditions</strong></p>
+                    <p>Trip schedules may be modified or cancelled due to adverse weather conditions or unforeseen circumstances. In such cases, alternative arrangements will be made or full refund will be provided.</p>
+
+                    <p><strong>7. UPES Student Verification</strong></p>
+                    <p>Only current UPES students with valid SAP ID and student credentials are eligible for our services. False information may result in immediate cancellation without refund.</p>
+
+                    <p class="text-muted">Last updated: August 2025</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="loginModalLabel">Sign In to Good to Go</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="loginForm">
+                        <div class="mb-3">
+                            <label for="loginUsername" class="form-label">Username</label>
+                            <input type="text" class="form-control" id="loginUsername" name="username" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="loginPassword" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="loginPassword" name="password" required>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">
+                                <span class="spinner-border spinner-border-sm me-2 d-none" id="loginSpinner"></span>
+                                Sign In
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/auth.js"></script>
+</body>
+</html>

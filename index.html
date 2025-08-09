@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Good to Go - Travel Planning for UPES Students</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Splash Screen -->
+    <div id="splashScreen" class="splash-screen">
+        <div class="splash-content">
+            <img src="assets/logo.svg" alt="Good to Go" class="splash-logo">
+            <h1 class="splash-title">Good to Go</h1>
+            <p class="splash-subtitle">Your UPES Travel Companion</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div id="mainContent" class="main-content">
+        <!-- Header -->
+        <header class="navbar navbar-expand-lg navbar-dark bg-transparent position-absolute w-100" style="z-index: 1000;">
+            <div class="container">
+                <a class="navbar-brand d-flex align-items-center" href="#">
+                    <img src="assets/logo.svg" alt="Good to Go" width="40" height="40" class="me-2">
+                    <span class="fw-bold">Good to Go</span>
+                </a>
+                <div class="navbar-nav ms-auto" id="navbarActions">
+                    <a href="C:\Users\Luv Thapa\Downloads\GoTravelUp\GoTravelUp\public\signup.html" class="btn btn-primary btn-rounded" id="signupBtn">Sign Up</a>
+                    <a href="C:\Users\Luv Thapa\Downloads\GoTravelUp\GoTravelUp\public\dashboard.html class="btn btn-success btn-rounded d-none" id="dashboardBtn">Dashboard</a>
+                </div>
+            </div>
+        </header>
+
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="hero-bg"></div>
+            <div class="hero-overlay"></div>
+            <div class="container hero-content">
+                <div class="row align-items-center min-vh-100">
+                    <div class="col-lg-8 mx-auto text-center text-white">
+                        <h1 class="display-3 fw-bold mb-4 hero-title">Explore Uttarakhand</h1>
+                        <p class="lead mb-5 hero-subtitle">Discover the breathtaking beauty of Uttarakhand with specially curated trips for UPES students. From spiritual Haridwar to adventurous Rishikesh!</p>
+                        <div id="heroActions">
+                            <a href="/signup" class="btn btn-primary btn-lg btn-rounded me-3" id="heroSignupBtn">Start Your Journey</a>
+                            <a href="/dashboard" class="btn btn-success btn-lg btn-rounded me-3 d-none" id="heroDashboardBtn">Go to Dashboard</a>
+                            <a href="#about" class="btn btn-outline-light btn-lg btn-rounded">Learn More</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="py-5 bg-light">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12 text-center mb-5">
+                        <h2 class="display-5 fw-bold text-primary">Why Choose Good to Go?</h2>
+                        <p class="lead text-muted">Designed exclusively for UPES students</p>
+                    </div>
+                </div>
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <div class="feature-card text-center p-4">
+                            <div class="feature-icon mb-3">
+                                <i class="fas fa-mountain fa-3x text-primary"></i>
+                            </div>
+                            <h4>Adventure Awaits</h4>
+                            <p class="text-muted">Experience thrilling adventures in the Himalayas with safety and expert guidance.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="feature-card text-center p-4">
+                            <div class="feature-icon mb-3">
+                                <i class="fas fa-wallet fa-3x text-primary"></i>
+                            </div>
+                            <h4>Student-Friendly Pricing</h4>
+                            <p class="text-muted">Special discounts and affordable packages designed for college students.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="feature-card text-center p-4">
+                            <div class="feature-icon mb-3">
+                                <i class="fas fa-users fa-3x text-primary"></i>
+                            </div>
+                            <h4>Community Travel</h4>
+                            <p class="text-muted">Meet fellow UPES students and create lasting memories together.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Destinations Section -->
+        <section class="py-5">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12 text-center mb-5">
+                        <h2 class="display-5 fw-bold text-primary">Popular Destinations</h2>
+                        <p class="lead text-muted">Explore the gems of Uttarakhand</p>
+                    </div>
+                </div>
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <div class="destination-card">
+                            <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop" alt="Rishikesh" class="destination-img">
+                            <div class="destination-content">
+                                <h4>Rishikesh</h4>
+                                <p>Adventure capital with river rafting, bungee jumping, and spiritual experiences.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="destination-card">
+                            <img src="https://images.unsplash.com/photo-1580967217932-e6beeef47e7b?w=400&h=300&fit=crop" alt="Haridwar" class="destination-img">
+                            <div class="destination-content">
+                                <h4>Haridwar</h4>
+                                <p>Holy city on the banks of Ganga with beautiful ghats and evening aarti.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="destination-card">
+                            <img src="https://images.unsplash.com/photo-1506197603052-3cc9c3a201bd?w=400&h=300&fit=crop" alt="Maldevta" class="destination-img">
+                            <div class="destination-content">
+                                <h4>Maldevta</h4>
+                                <p>Peaceful retreat surrounded by lush forests and pristine nature.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="bg-dark text-white py-5">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-4 mb-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <img src="assets/logo.svg" alt="Good to Go" width="40" height="40" class="me-2">
+                            <h5 class="mb-0">Good to Go</h5>
+                        </div>
+                        <p class="text-muted">Your trusted travel companion for exploring the beautiful state of Uttarakhand.</p>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <h5 class="mb-3">Quick Links</h5>
+                        <ul class="list-unstyled">
+                            <li><a href="#" class="text-muted text-decoration-none">About Us</a></li>
+                            <li><a href="#" class="text-muted text-decoration-none">Privacy Policy</a></li>
+                            <li><a href="#" class="text-muted text-decoration-none">Terms & Conditions</a></li>
+                            <li><a href="#" class="text-muted text-decoration-none">Contact</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <h5 class="mb-3">Follow Us</h5>
+                        <div class="social-links">
+                            <a href="#" class="text-white me-3"><i class="fab fa-instagram fa-2x"></i></a>
+                            <a href="#" class="text-white me-3"><i class="fab fa-facebook fa-2x"></i></a>
+                            <a href="#" class="text-white me-3"><i class="fab fa-telegram fa-2x"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <hr class="my-4">
+                <div class="row">
+                    <div class="col-12 text-center">
+                        <p class="mb-0 text-muted">&copy; 2025 Good to Go. Made for UPES Students with ❤️</p>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+        // Check authentication status and update UI
+        async function checkAuthAndUpdateUI() {
+            try {
+                const response = await fetch('/api/profile');
+                const data = await response.json();
+                
+                if (data.success) {
+                    // User is logged in, hide signup buttons and show dashboard buttons
+                    document.getElementById('signupBtn').classList.add('d-none');
+                    document.getElementById('dashboardBtn').classList.remove('d-none');
+                    document.getElementById('heroSignupBtn').classList.add('d-none');
+                    document.getElementById('heroDashboardBtn').classList.remove('d-none');
+                } else {
+                    // User is not logged in, show signup buttons
+                    document.getElementById('signupBtn').classList.remove('d-none');
+                    document.getElementById('dashboardBtn').classList.add('d-none');
+                    document.getElementById('heroSignupBtn').classList.remove('d-none');
+                    document.getElementById('heroDashboardBtn').classList.add('d-none');
+                }
+            } catch (error) {
+                // Error checking auth, assume not logged in
+                console.log('Auth check failed, showing signup options');
+                document.getElementById('signupBtn').classList.remove('d-none');
+                document.getElementById('dashboardBtn').classList.add('d-none');
+                document.getElementById('heroSignupBtn').classList.remove('d-none');
+                document.getElementById('heroDashboardBtn').classList.add('d-none');
+            }
+        }
+
+        // Run on page load
+        document.addEventListener('DOMContentLoaded', checkAuthAndUpdateUI);
+    </script>
+</body>
+</html>
