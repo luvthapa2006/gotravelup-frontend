@@ -136,12 +136,7 @@
                                         <i class="fas fa-qrcode me-2"></i> QR Code Scanner
                                     </label>
                                 </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="method" id="debitCard" value="Debit Card">
-                                    <label class="form-check-label" for="debitCard">
-                                        <i class="fas fa-credit-card me-2"></i> Debit Card
-                                    </label>
-                                </div>
+
                                 <div class="form-check">
                                     <input class="form-check-input" type="radio" name="method" id="cash" value="Cash">
                                     <label class="form-check-label" for="cash">
@@ -356,7 +351,50 @@
             </div>
         </div>
     </div>
+<div class="modal fade" id="qrCodeModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Scan to Pay</h5>
+            </div>
+            <div class="modal-body text-center">
+                <p>Scan the QR code below with any UPI app.</p>
+                <img src="https://ia601701.us.archive.org/19/items/whats-app-image-2025-08-09-at-23.38.37-8cd-2b-873/WhatsApp%20Image%202025-08-09%20at%2023.38.37_8cd2b873.jpg" alt="Payment QR Code" class="img-fluid mb-3">
+                <p class="text-muted">Amount to Pay: <strong>₹<span id="qrAmount">0</span></strong></p>
+                <div id="paymentStatus" class="mt-3">
+                    <span class="spinner-border spinner-border-sm me-2"></span>
+                    Waiting for payment confirmation...
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
+<div class="modal fade" id="cashCollectorModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Contact Cash Collector</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body text-center">
+                <i class="fas fa-money-bill-wave fa-4x text-primary mb-3"></i>
+                <h4>Pay in Cash</h4>
+                <p class="text-muted">Please contact the trip coordinator to complete your payment. Your wallet will be updated once they confirm receipt of the cash.</p>
+                <div class="d-grid gap-2 mt-4">
+                    <a href="tel:+919876543210" class="btn btn-success">
+                        <i class="fas fa-phone me-2"></i>
+                        Call Coordinator
+                    </a>
+                    <a href="https://wa.me/919876543210" target="_blank" class="btn btn-success">
+                        <i class="fab fa-whatsapp me-2"></i>
+                        Chat on WhatsApp
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="js/auth.js"></script>
     <script>
@@ -729,38 +767,86 @@ function bookTrip(buttonElement) {
             }
         }
 
-        async function handleWalletAdd(e) {
-            e.preventDefault();
+// In dashboard.html script
+
+let paymentCheckInterval = null; // Variable to hold our interval
+
+async function handleWalletAdd(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(e.target);
+    const amount = formData.get('amount');
+    const method = formData.get('method');
+
+    // Step 1: Initiate the transaction with the backend
+    try {
+        const response = await fetch(`${API_BASE}/api/wallet/initiate-transaction`, {
+            method: 'POST',
+            credentials: 'include',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ amount, method: method === 'QR Scanner' ? 'QR' : 'Cash' })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            const transactionId = data.transactionId;
+            bootstrap.Modal.getInstance(document.getElementById('walletModal')).hide();
             
-            const formData = new FormData(e.target);
-            const amount = formData.get('amount');
-            const method = formData.get('method');
-            
-            try {
-                const response = await fetch(`${API_BASE}/api/wallet/add`, {
-                    method: 'POST',
-                    credentials: 'include',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ amount, method })
-                });
-                
-                const data = await response.json();
-                
-                if (data.success) {
-                    document.getElementById('walletAmount').textContent = data.newBalance;
-                    bootstrap.Modal.getInstance(document.getElementById('walletModal')).hide();
-                    showAlert('success', data.message);
-                    e.target.reset();
-                } else {
-                    showAlert('error', data.message);
-                }
-            } catch (error) {
-                console.error('Error adding money:', error);
-                showAlert('error', 'Failed to add money. Please try again.');
+            // Step 2: Show the correct modal based on the payment method
+            if (method === 'QR Scanner') {
+                document.getElementById('qrAmount').textContent = amount;
+                const qrModal = new bootstrap.Modal(document.getElementById('qrCodeModal'));
+                qrModal.show();
+                // Start checking for payment confirmation
+                checkPaymentStatus(transactionId);
+            } else if (method === 'Cash') {
+                const cashModal = new bootstrap.Modal(document.getElementById('cashCollectorModal'));
+                cashModal.show();
             }
+        } else {
+            showAlert('error', data.message);
         }
+    } catch (error) {
+        console.error('Error initiating transaction:', error);
+        showAlert('error', 'Could not start the transaction. Please try again.');
+    }
+}
+
+function checkPaymentStatus(transactionId) {
+    // Clear any previous interval
+    if (paymentCheckInterval) {
+        clearInterval(paymentCheckInterval);
+    }
+
+    // Check the status every 3 seconds
+    paymentCheckInterval = setInterval(async () => {
+        try {
+            const response = await fetch(`${API_BASE}/api/wallet/payment-status/${transactionId}`, {
+                method: 'GET',
+                credentials: 'include'
+            });
+            const data = await response.json();
+
+            if (data.success && data.status === 'completed') {
+                // Payment is confirmed!
+                clearInterval(paymentCheckInterval);
+                const qrModalEl = document.getElementById('qrCodeModal');
+                const qrModal = bootstrap.Modal.getInstance(qrModalEl);
+                if(qrModal) {
+                    qrModal.hide();
+                }
+                showAlert('success', 'Payment successful! Your wallet has been updated.');
+                // Reload user profile to show new balance
+                loadUserProfile();
+            }
+            // If status is still 'pending', do nothing and let the interval run again.
+        } catch (error) {
+            console.error('Error checking payment status:', error);
+            clearInterval(paymentCheckInterval); // Stop on error
+        }
+    }, 3000); // 3000ms = 3 seconds
+}
 
         function copyReferralCode() {
             const codeInput = document.getElementById('shareReferralCode');
