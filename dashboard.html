@@ -410,44 +410,57 @@
             setupEventListeners();
         });
 
-        async function loadUserProfile() {
-            try {
-                const response = await fetch(`${API_BASE}/api/profile`, {
-                    method: 'GET',
-                    credentials: 'include' // Include cookies for session management
-                });
-                const data = await response.json();
-                
-                if (data.success) {
-                    const user = data.user;
-                    currentUser = user;
-                    document.getElementById('userName').textContent = user.name;
-                    document.getElementById('userSapId').textContent = user.sapId;
-                    document.getElementById('userEmail').textContent = user.email;
-                    document.getElementById('userPhone').textContent = user.phone;
-                    document.getElementById('walletAmount').textContent = user.wallet || 0;
-                    document.getElementById('referralCode').textContent = user.referralCode;
-                    document.getElementById('shareReferralCode').value = user.referralCode;
-                    
-                    // Set profile avatar based on gender
-                    const avatarImg = document.getElementById('profileAvatar');
-                    if (user.gender === 'female') {
-                        avatarImg.src = 'assets/female-avatar2.svg';
-                    } else {
-                        avatarImg.src = 'assets/male-avatar2.svg';
-                    }
-                } else {
-                    window.location.href = '/signup';
-                }
-            } catch (error) {
-                console.error('Error loading profile:', error);
-                window.location.href = '/signup';
-            }
+// In dashboard.html
+
+async function loadUserProfile() {
+    try {
+        const response = await fetch(`${API_BASE}/api/profile`, {
+            method: 'GET',
+            credentials: 'include'
+        });
+
+        // ✅ FIX: Check if the response is a 401 Unauthorized error
+        if (response.status === 401) {
+            throw new Error('Not authenticated');
         }
 
-// In dashboard.html
+        if (!response.ok) {
+            throw new Error(`Server error: ${response.statusText}`);
+        }
 
-// In dashboard.html
+        const data = await response.json();
+        
+        if (data.success) {
+            const user = data.user;
+            currentUser = user;
+            // ... (rest of your user info display logic is here)
+            document.getElementById('userName').textContent = user.name;
+            document.getElementById('userSapId').textContent = user.sapId;
+            document.getElementById('userEmail').textContent = user.email;
+            document.getElementById('userPhone').textContent = user.phone;
+            document.getElementById('walletAmount').textContent = user.wallet || 0;
+            document.getElementById('referralCode').textContent = user.referralCode;
+            document.getElementById('shareReferralCode').value = user.referralCode;
+            
+            const avatarImg = document.getElementById('profileAvatar');
+            avatarImg.src = user.gender === 'female' ? 'assets/female-avatar.svg' : 'assets/male-avatar.svg';
+        } else {
+            // This case should be rare, but we handle it.
+            throw new Error(data.message || 'Failed to load profile.');
+        }
+    } catch (error) {
+        console.error('Error loading profile:', error);
+        // ✅ FIX: Instead of redirecting, show an error message on the page.
+        document.querySelector('.container').innerHTML = `
+            <div class="text-center py-5">
+                <h2 class="text-danger">Authentication Failed</h2>
+                <p class="text-muted">You need to be logged in to view this page.</p>
+                <a href="signin.html" class="btn btn-primary mt-3">Login Now</a>
+            </div>
+        `;
+    }
+}
+
 
 async function loadTrips() {
     console.log("1. Starting to load trips...");
