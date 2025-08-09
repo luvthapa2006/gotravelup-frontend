@@ -1,89 +1,81 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign In - Good to Go</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/styles.css" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign In - GoTravelUp</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="css/styles.css" rel="stylesheet" />
 </head>
-<body class="signup-body">
-    <!-- Header -->
-    <header class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <div class="container">
-            <a class="navbar-brand" href="index.html">Good to Go</a>
-        </div>
-    </header>
+<body class="bg-light">
 
-    <!-- Sign In Form -->
-    <div class="container py-5">
-        <div class="row justify-content-center">
-            <div class="col-lg-6">
-                <div class="signup-card">
-                    <div class="text-center mb-4">
-                        <h2 class="fw-bold text-primary">Sign In</h2>
-                        <p class="text-muted">Log in with your account credentials</p>
-                    </div>
-
-                    <form id="signinForm">
-                        <div class="mb-3">
-                            <label for="username" class="form-label">Username</label>
-                            <input type="text" class="form-control" id="username" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="password" class="form-label">Password</label>
-                            <input type="password" class="form-control" id="password" required>
-                        </div>
-                        <div class="d-grid">
-                            <button type="submit" class="btn btn-primary btn-lg">
-                                <span class="spinner-border spinner-border-sm me-2 d-none" id="signinSpinner"></span>
-                                Log In
-                            </button>
-                        </div>
-                        <div class="text-center mt-3">
-                            <a href="signup.html" class="text-decoration-none">Don’t have an account? Sign Up</a>
-                        </div>
-                    </form>
-                </div>
+  <div class="container py-5">
+    <div class="row justify-content-center">
+      <div class="col-md-6 col-lg-5">
+        <div class="card shadow-lg rounded-4">
+          <div class="card-body p-4">
+            <div class="text-center mb-4">
+              <img src="assets/logo.svg" alt="GoTravelUp" width="60" class="mb-2">
+              <h3 class="fw-bold">Sign In</h3>
+              <p class="text-muted">Welcome back! Please log in.</p>
             </div>
+
+            <form id="loginForm">
+              <div class="mb-3">
+                <label for="username" class="form-label">Username</label>
+                <input type="text" id="username" name="username" class="form-control" required />
+              </div>
+
+              <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" id="password" name="password" class="form-control" required />
+              </div>
+
+              <button type="submit" class="btn btn-primary w-100 rounded-pill">Login</button>
+            </form>
+
+            <div class="text-center mt-3">
+              <small class="text-muted">Don't have an account? <a href="signup.html">Sign Up</a></small>
+            </div>
+
+          </div>
         </div>
+      </div>
     </div>
+  </div>
 
-    <script>
-        const API_BASE = "https://gotravelup-backend.onrender.com/api"; // Your backend API URL
+  <script>
+    const API_BASE = "https://gotravelup-backend.onrender.com";
 
-        document.getElementById('signinForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
+    document.getElementById("loginForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
 
-            const username = document.getElementById('username').value.trim();
-            const password = document.getElementById('password').value.trim();
+      const username = document.getElementById("username").value.trim();
+      const password = document.getElementById("password").value.trim();
 
-            document.getElementById('signinSpinner').classList.remove('d-none');
-
-            try {
-                const res = await fetch(`${API_BASE}/login`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    credentials: "include", // Include cookies for session management
-                    body: JSON.stringify({ username, password })
-                });
-
-
-                const data = await res.json();
-                document.getElementById('signinSpinner').classList.add('d-none');
-
-                if (res.ok) {
-                    alert("Login successful!");
-                    localStorage.setItem('user', JSON.stringify(data.user));
-                    window.location.href = "dashboard.html";
-                } else {
-                    alert(data.message || "Invalid credentials");
-                }
-            } catch (err) {
-                document.getElementById('signinSpinner').classList.add('d-none');
-                alert("Error connecting to server.");
-            }
+      try {
+        const res = await fetch(`${API_BASE}/api/login`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include", // ✅ Keep session cookie
+          body: JSON.stringify({ username, password })
         });
-    </script>
+
+        const data = await res.json();
+
+        if (res.ok) {
+          alert("Login successful!");
+          window.location.href = "dashboard.html"; // ✅ Go straight to dashboard
+        } else {
+          alert(data.message || "Login failed");
+        }
+
+      } catch (err) {
+        console.error("Login error:", err);
+        alert("Something went wrong. Please try again.");
+      }
+    });
+  </script>
+
 </body>
 </html>
