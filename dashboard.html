@@ -457,13 +457,15 @@ async function loadTrips() {
 
 // In dashboard.html
 
+// In dashboard.html
+
 function createTripCard(trip) {
     const col = document.createElement('div');
     col.className = 'col-md-6 col-lg-4';
-    
+
     const discount = Math.round(((trip.originalPrice - trip.salePrice) / trip.originalPrice) * 100);
     const imageUrl = `${API_BASE}${trip.image}`;
-            
+
     col.innerHTML = `
         <div class="trip-card">
             <div class="trip-image">
@@ -482,13 +484,13 @@ function createTripCard(trip) {
                     <span class="original-price">₹${trip.originalPrice}</span>
                     <span class="sale-price">₹${trip.salePrice}</span>
                 </div>
-                <button class="btn btn-primary w-100 mt-3" onclick="bookTrip('${trip._id}')">
+                <button class="btn btn-primary w-100 mt-3" data-trip='${JSON.stringify(trip)}' onclick="bookTrip(this)">
                     <i class="fas fa-check me-1"></i> Book Now
                 </button>
             </div>
         </div>
     `;
-    
+
     return col;
 }
 
@@ -562,28 +564,19 @@ async function loadMyTrips() {
             return col;
         }
 
-        function bookTrip(tripId) {
-            // Find the trip details
-            fetch(`${API_BASE}/api/trips`, {
-                method: 'GET',
-                credentials: 'include'
-            })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        const trip = data.trips.find(t => t.id === tripId);
-                        if (trip) {
-                            currentTripToBook = trip;
-                            showBookingModal(trip);
-                        }
-                    }
-                })
-                .catch(error => {
-                    console.error('Error loading trip details:', error);
-                    alert('Error loading trip details. Please try again.');
-                    credentials: 'include';
-                });
-        }
+// ✅ PASTE THIS NEW CODE IN ITS PLACE
+function bookTrip(buttonElement) {
+    // Read trip data directly from the button's data-trip attribute
+    const tripData = JSON.parse(buttonElement.getAttribute('data-trip'));
+
+    if (tripData) {
+        currentTripToBook = tripData;
+        showBookingModal(tripData);
+    } else {
+        console.error('Could not find trip data on the button.');
+        alert('An error occurred. Please try again.');
+    }
+}
 
         function showBookingModal(trip) {
             // Update modal content
