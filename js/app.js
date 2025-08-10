@@ -336,8 +336,14 @@ document.addEventListener('DOMContentLoaded', function () {
         // Listen for changes
         themeToggle.addEventListener('change', function () {
             const theme = this.checked ? 'dark' : 'light';
+            document.body.classList.add('theme-transition');
+            void document.body.offsetWidth;
             document.body.setAttribute('data-theme', theme);
             localStorage.setItem('theme', theme); // save to localStorage
+
+            setTimeout(() => {
+                document.body.classList.remove('theme-transition');
+            }, 300);
         });
     }
 });
