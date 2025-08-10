@@ -913,9 +913,13 @@ footer .text-muted {
  * Ensures the main dashboard body and cards use the correct
  * dark theme colors and that all text remains visible.
  */
-[data-theme="dark"] .containermain {
+[data-theme="dark"] body.dashboard-body {
     background-color: var(--dark-color) !important; /* Force the main background to be dark */
-    /* color: var(--text-primary); /* Set default text color to be light */
+    color: var(--text-primary); /* Set default text color to be light */
+}
+
+[data-theme="dark"] .container {
+    background-color: transparent;
 }
 
 /* Make section titles (h2) visible in dark mode */
