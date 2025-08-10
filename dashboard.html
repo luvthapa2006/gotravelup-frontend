@@ -443,7 +443,7 @@ async function loadUserProfile() {
             document.getElementById('shareReferralCode').value = user.referralCode;
             
             const avatarImg = document.getElementById('profileAvatar');
-            avatarImg.src = user.gender === 'female' ? 'assets/female-avatar.svg' : 'assets/male-avatar.svg';
+            avatarImg.src = user.gender === 'female' ? 'assets/female-avatar2.svg' : 'assets/male-avatar2.svg';
         } else {
             // This case should be rare, but we handle it.
             throw new Error(data.message || 'Failed to load profile.');
