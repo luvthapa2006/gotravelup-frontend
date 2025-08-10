@@ -5,7 +5,6 @@ const GoodToGo = {
     init: function() {
         this.showSplashScreen();
         this.setupEventListeners();
-        this.initializeTheme();
     },
 
     showSplashScreen: function() {
@@ -112,27 +111,6 @@ const GoodToGo = {
             el.style.transform = 'translateY(30px)';
             observer.observe(el);
         });
-    },
-
-    initializeTheme: function() {
-        const savedTheme = localStorage.getItem('theme');
-        if (savedTheme) {
-            this.applyTheme(savedTheme);
-        } else {
-            // Auto detect system theme
-            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-                this.applyTheme('dark');
-            }
-        }
-
-        // Listen for system theme changes
-        if (window.matchMedia) {
-            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
-                if (!localStorage.getItem('theme') || localStorage.getItem('theme') === 'auto') {
-                    this.applyTheme(e.matches ? 'dark' : 'light');
-                }
-            });
-        }
     },
 
     applyTheme: function(theme) {
