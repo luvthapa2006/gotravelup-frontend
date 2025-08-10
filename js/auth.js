@@ -3,7 +3,7 @@
 // =============================
 
 // Change this if backend URL changes
-const API_BASE = '';
+const API_BASE = 'https://gotravelup-backend.onrender.com';
 
 class AuthManager {
     constructor() {
