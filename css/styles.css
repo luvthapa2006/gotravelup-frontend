@@ -923,10 +923,6 @@ footer .text-muted {
 [data-theme="dark"] .containermn {
     background-color: var(--dark-color);
 }
-[data-theme="dark"] .container {
-    background-color: var(--dark-color); /* Force the main background to be dark */
-    /* color: var(--text-primary); /* Set default text color to be light */
-}
 
 
 /* Make section titles (h2) visible in dark mode */
