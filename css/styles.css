@@ -920,7 +920,8 @@ footer .text-muted {
 }
 
 [data-theme="dark"] .dashboard-content-wrapper {
-    background-color: var(--dark-color); /* Dark theme background */
+    background-color: var(--dark-color);/* Dark theme background */
+    color: var(--text-primary); 
 }
 
 
