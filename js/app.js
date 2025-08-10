@@ -313,40 +313,33 @@ const Performance = {
 
 // Initialize the application when DOM is loaded
 document.addEventListener('DOMContentLoaded', function () {
-    // 🚀 GoodToGo initialization
     GoodToGo.init();
     Performance.init();
     Analytics.page(document.title);
 
-    // Mark app initialization
-    Performance.mark('app-init-start');
-    console.log('🚀 Good to Go application initialized!');
-    Performance.mark('app-init-end');
-    Performance.measure('app-initialization', 'app-init-start', 'app-init-end');
-
-    // 🎨 Theme initialization
     const savedTheme = localStorage.getItem('theme') || 'light';
     document.body.setAttribute('data-theme', savedTheme);
 
     const themeToggle = document.getElementById('theme-toggle');
     if (themeToggle) {
-        // Apply correct toggle position
         themeToggle.checked = savedTheme === 'dark';
 
-        // Listen for changes
-        themeToggle.addEventListener('change', function () {
-            const theme = this.checked ? 'dark' : 'light';
+        const applyTheme = (theme) => {
             document.body.classList.add('theme-transition');
-            void document.body.offsetWidth;
+            void document.body.offsetWidth; // force reflow before theme change
             document.body.setAttribute('data-theme', theme);
-            localStorage.setItem('theme', theme); // save to localStorage
-
+            localStorage.setItem('theme', theme);
             setTimeout(() => {
                 document.body.classList.remove('theme-transition');
             }, 300);
+        };
+
+        themeToggle.addEventListener('change', function () {
+            applyTheme(this.checked ? 'dark' : 'light');
         });
     }
 });
+
 
 
 
