@@ -920,7 +920,7 @@ footer .text-muted {
 [data-theme="dark"] body {
     background-color: var(--dark-color);
 }
-[data-theme="dark"] .containermn {
+[data-theme="dark"] .container {
     background-color: var(--dark-color);
 }
 
