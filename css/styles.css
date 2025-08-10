@@ -908,3 +908,61 @@ footer .text-muted {
         color: black !important;
     }
 }
+/* ============================================= */
+/* == RESPONSIVE & THEME FIXES (Add to end of file) == */
+/* ============================================= */
+
+/*
+ * Fix 1: Dark Theme Backgrounds
+ * Ensures the main dashboard body and profile card use the correct
+ * dark theme colors and that text remains visible.
+ */
+[data-theme="dark"] .dashboard-body {
+    background-color: var(--dark-color);
+}
+
+[data-theme="dark"] .profile-card {
+    background-color: var(--light-color); /* This is a dark gray in dark mode */
+    color: var(--text-primary); /* Ensures text is light */
+}
+
+[data-theme="dark"] .profile-card .text-muted {
+    color: var(--text-secondary) !important; /* Makes SAP ID, Email, etc., visible */
+}
+
+/*
+ * Fix 2: Mobile Navbar Menu
+ * This targets the expanded menu on smaller screens.
+ */
+@media (max-width: 991.98px) {
+    /* For Light Theme (Default) */
+    .navbar-collapse {
+        background-color: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(5px);
+        -webkit-backdrop-filter: blur(5px);
+        border-radius: var(--border-radius-sm);
+        padding: 1rem;
+        margin-top: 0.5rem;
+    }
+
+    /* Make links dark when the light-themed menu is open */
+    .navbar-collapse .nav-link {
+        color: var(--dark-color) !important;
+    }
+    .navbar-collapse .nav-link:hover {
+        color: var(--primary-color) !important;
+    }
+    
+    /* For Dark Theme */
+    [data-theme="dark"] .navbar-collapse {
+        background-color: rgba(45, 55, 72, 0.95); /* A dark, blurry background */
+    }
+    
+    /* Make links light when the dark-themed menu is open */
+    [data-theme="dark"] .navbar-collapse .nav-link {
+        color: var(--text-primary) !important;
+    }
+    [data-theme="dark"] .navbar-collapse .nav-link:hover {
+        color: var(--primary-color) !important;
+    }
+}
