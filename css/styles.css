@@ -922,10 +922,6 @@ footer .text-muted {
     background-color: var(--dark-color);
 }
 
-[data-theme="dark"] .navbar {
-    background-color: opaqueblack; /* A dark, blurry background */
-
-}
 
 /* Make section titles (h2) visible in dark mode */
 [data-theme="dark"] h2 {
