@@ -900,8 +900,8 @@ footer .text-muted {
     }
     
     body {
-        background: white !important;
-        color: black !important;
+        background: white;
+        color: black;
     }
 }
 /* ============================================= */
@@ -922,6 +922,17 @@ footer .text-muted {
 }
 [data-theme="dark"] .containermn {
     background-color: transparent;
+    background: transparent;
+}
+[data-theme="dark"] .container {
+    background-color: transparent;
+    background: transparent; /* Force the main background to be dark */
+    /* color: var(--text-primary); /* Set default text color to be light */
+}
+
+[data-theme="dark"] .py-4 {
+    background-color: transparent;
+    background: transparent; /* Make navbar background transparent */
 }
 
 /* Make section titles (h2) visible in dark mode */
