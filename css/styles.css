@@ -913,7 +913,7 @@ footer .text-muted {
  * Ensures the main dashboard body and cards use the correct
  * dark theme colors and that all text remains visible.
  */
-[data-theme="dark"] body.container py-4 {
+[data-theme="dark"] .containermain {
     background-color: var(--dark-color) !important; /* Force the main background to be dark */
     /* color: var(--text-primary); /* Set default text color to be light */
 }
