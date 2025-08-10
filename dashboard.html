@@ -896,7 +896,7 @@ function checkPaymentStatus(transactionId) {
                     document.body.removeAttribute('data-theme');
                 }
             }
-            
+            document.getElementById('applyTheme').blur();
             bootstrap.Modal.getInstance(document.getElementById('themeModal')).hide();
             showAlert('success', 'Theme applied successfully!');
         }
