@@ -924,6 +924,9 @@ footer .text-muted {
     color: var(--text-primary); 
 }
 
+[data-theme="dark"] #myTripsContainer {
+    color: var(--text-primary);
+}
 
 /* Make section titles (h2) visible in dark mode */
 [data-theme="dark"] h2 {
