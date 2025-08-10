@@ -318,10 +318,6 @@ body {
     min-height: 100vh;
 }
 
-[data-theme="dark"] .dashboard-body {
-    background-color: var(--dark-color);
-}
-
 .profile-card {
     background: white;
     border-radius: var(--border-radius);
@@ -917,9 +913,9 @@ footer .text-muted {
  * Ensures the main dashboard body and cards use the correct
  * dark theme colors and that all text remains visible.
  */
-[data-theme="dark"] body.dashboard-body {
+[data-theme="dark"] body.container {
     background-color: var(--dark-color) !important; /* Force the main background to be dark */
-    color: var(--text-primary); /* Set default text color to be light */
+    /* color: var(--text-primary); /* Set default text color to be light */
 }
 
 /* Make section titles (h2) visible in dark mode */
