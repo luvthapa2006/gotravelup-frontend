@@ -312,19 +312,23 @@ const Performance = {
 };
 
 // Initialize the application when DOM is loaded
-document.addEventListener('DOMContentLoaded', function() {
-    GoodToGo.init();
-    Performance.init();
-    Analytics.page(document.title);
-    
-    // Mark app initialization
-    Performance.mark('app-init-start');
-    
-    console.log('🚀 Good to Go application initialized!');
-    
-    Performance.mark('app-init-end');
-    Performance.measure('app-initialization', 'app-init-start', 'app-init-end');
+document.addEventListener('DOMContentLoaded', () => {
+    // Theme toggle button listener
+    const themeToggle = document.getElementById('theme-toggle');
+    if (themeToggle) {
+        // Set toggle state based on saved theme
+        themeToggle.checked = localStorage.getItem('theme') === 'dark';
+
+        themeToggle.addEventListener('change', function () {
+            const theme = this.checked ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+        });
+    }
 });
+
+
+
 
 // Export for use in other scripts
 window.GoodToGo = GoodToGo;
