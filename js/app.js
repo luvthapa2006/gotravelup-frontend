@@ -334,7 +334,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }, 300);
         };
 
-        themeToggle.addEventListener('clicks', function () {
+        themeToggle.addEventListener('click', function () {
             applyTheme(this.checked ? 'dark' : 'light');
         });
     }
