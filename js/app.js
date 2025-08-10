@@ -113,14 +113,6 @@ const GoodToGo = {
         });
     },
 
-    applyTheme: function(theme) {
-        if (theme === 'dark') {
-            document.body.setAttribute('data-theme', 'dark');
-        } else {
-            document.body.removeAttribute('data-theme');
-        }
-    },
-
     // Utility functions
     showAlert: function(type, message, duration = 5000) {
         const alertContainer = document.createElement('div');
