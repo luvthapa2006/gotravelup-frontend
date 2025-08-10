@@ -918,8 +918,13 @@ footer .text-muted {
     color: var(--text-primary); /* Set default text color to be light
 }*/
 
-[data-theme="dark"] .container {
+[data-theme="dark"] .containermn {
     background-color: var(--dark-color);
+}
+
+[data-theme="dark"] .navbar {
+    background-color: opaqueblack; /* A dark, blurry background */
+
 }
 
 /* Make section titles (h2) visible in dark mode */
