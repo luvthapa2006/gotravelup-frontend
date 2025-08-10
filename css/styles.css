@@ -917,11 +917,12 @@ footer .text-muted {
     background-color: var(--dark-color) !important;  Force the main background to be dark
     color: var(--text-primary); /* Set default text color to be light
 }*/
-
-[data-theme="dark"] .containermn {
+[data-theme="dark"] .dashboard-body {
     background-color: var(--dark-color);
 }
-
+[data-theme="dark"] .containermn {
+    background-color: transparent;
+}
 
 /* Make section titles (h2) visible in dark mode */
 [data-theme="dark"] h2 {
