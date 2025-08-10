@@ -669,13 +669,8 @@ function bookTrip(buttonElement) {
             document.getElementById('copyReferralCode').addEventListener('click', copyReferralCode);
             
             // Theme settings
-            document.getElementById('applyTheme').addEventListener('click', () => {
-        const selectedTheme = document.querySelector('input[name="theme"]:checked').value;
-        saveThemePreference(selectedTheme); // Call the new global function
-        
-        bootstrap.Modal.getInstance(document.getElementById('themeModal')).hide();
-        showAlert('success', 'Theme applied successfully!');
-    });
+            document.getElementById('applyTheme').addEventListener('click', applyTheme);
+            
             // Sign out
             document.getElementById('signOutBtn').addEventListener('click', signOut);
             
