@@ -913,22 +913,32 @@ footer .text-muted {
 /* ============================================= */
 
 /*
- * Fix 1: Dark Theme Backgrounds
- * Ensures the main dashboard body and profile card use the correct
- * dark theme colors and that text remains visible.
+ * Fix 1: Dark Theme Backgrounds & Text
+ * Ensures the main dashboard body and cards use the correct
+ * dark theme colors and that all text remains visible.
  */
-[data-theme="dark"] .dashboard-body {
-    background-color: var(--dark-color);
+[data-theme="dark"] body.dashboard-body {
+    background-color: var(--dark-color) !important; /* Force the main background to be dark */
+    color: var(--text-primary); /* Set default text color to be light */
 }
 
-[data-theme="dark"] .profile-card {
+/* Make section titles (h2) visible in dark mode */
+[data-theme="dark"] h2 {
+    color: var(--text-primary);
+}
+
+/* Ensure cards are a brighter dark color for contrast */
+[data-theme="dark"] .profile-card,
+[data-theme="dark"] .trip-card {
     background-color: var(--light-color); /* This is a dark gray in dark mode */
-    color: var(--text-primary); /* Ensures text is light */
+    color: var(--text-primary); /* Ensures text inside cards is light */
 }
 
-[data-theme="dark"] .profile-card .text-muted {
-    color: var(--text-secondary) !important; /* Makes SAP ID, Email, etc., visible */
+[data-theme="dark"] .profile-card .text-muted,
+[data-theme="dark"] .trip-card .text-muted {
+    color: var(--text-secondary) !important; /* Makes subtitles visible */
 }
+
 
 /*
  * Fix 2: Mobile Navbar Menu
