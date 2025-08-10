@@ -29,6 +29,11 @@ class AuthManager {
         if (referralInput) {
             referralInput.addEventListener('blur', () => this.validateReferralCode(referralInput.value));
         }
+        // Password strength indicator
+        const passwordInput = document.getElementById('password');
+        if (passwordInput) {
+            passwordInput.addEventListener('input', this.checkPasswordStrength);
+        }
     }
 
     // =============================
