@@ -921,19 +921,13 @@ footer .text-muted {
     background-color: var(--dark-color);
 }
 [data-theme="dark"] .containermn {
-    background-color: transparent;
-    background: transparent;
+    background-color: var(--dark-color);
 }
 [data-theme="dark"] .container {
-    background-color: transparent;
-    background: transparent; /* Force the main background to be dark */
+    background-color: var(--dark-color); /* Force the main background to be dark */
     /* color: var(--text-primary); /* Set default text color to be light */
 }
 
-[data-theme="dark"] .py-4 {
-    background-color: transparent;
-    background: transparent; /* Make navbar background transparent */
-}
 
 /* Make section titles (h2) visible in dark mode */
 [data-theme="dark"] h2 {
