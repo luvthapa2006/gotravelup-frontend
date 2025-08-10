@@ -1,9 +1,0 @@
-# In frontend/netlify.toml
-
-# This rule proxies requests from /api/* on your Netlify site
-# to your Render backend.
-[[redirects]]
-  from = "/api/*"
-  to = "https://gotravelup-backend.onrender.com/api/:splat"
-  status = 200
-  force = true

@@ -515,7 +515,7 @@ function createTripCard(trip) {
     col.className = 'col-md-6 col-lg-4';
 
     const discount = Math.round(((trip.originalPrice - trip.salePrice) / trip.originalPrice) * 100);
-    const imageUrl = `${API_BASE}${trip.image}`;
+    const imageUrl = `https://gotravelup-backend.onrender.com${trip.image}`;
 
     col.innerHTML = `
         <div class="trip-card">
