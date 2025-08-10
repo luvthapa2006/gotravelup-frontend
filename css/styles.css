@@ -917,7 +917,7 @@ footer .text-muted {
     background-color: var(--dark-color) !important;  Force the main background to be dark
     color: var(--text-primary); /* Set default text color to be light
 }*/
-[data-theme="dark"] .dashboard-body {
+[data-theme="dark"] body {
     background-color: var(--dark-color);
 }
 [data-theme="dark"] .containermn {
