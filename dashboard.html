@@ -63,7 +63,7 @@
                     <div class="row align-items-center">
                         <div class="col-auto">
                             <div class="profile-avatar">
-                                <img id="profileAvatar" src="assets/male-avatar.jpg" alt="Profile" width="80" height="80">
+                                <img id="profileAvatar" src="assets/male-avatar.svg" alt="Profile" width="80" height="80">
                             </div>
                         </div>
                         <div class="col">
@@ -74,7 +74,7 @@
                         </div>
                         <div class="col-auto">
                             <div class="referral-code">
-                                <small class="text-muted" style="color: yellow;">Referral Code</small>
+                                <small class="text-muted">Referral Code</small>
                                 <div class="fw-bold" id="referralCode">Loading...</div>
                             </div>
                         </div>
@@ -449,7 +449,7 @@ async function loadUserProfile() {
             document.getElementById('shareReferralCode').value = user.referralCode;
             
             const avatarImg = document.getElementById('profileAvatar');
-            avatarImg.src = user.gender === 'female' ? 'assets/female-avatar.jpg' : 'assets/male-avatar.jpg';
+            avatarImg.src = user.gender === 'female' ? 'assets/female-avatar.jpg' : 'assets/male-avatar.svg';
         } else {
             // This case should be rare, but we handle it.
             throw new Error(data.message || 'Failed to load profile.');
