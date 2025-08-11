@@ -316,28 +316,6 @@ document.addEventListener('DOMContentLoaded', function () {
     GoodToGo.init();
     Performance.init();
     Analytics.page(document.title);
-
-    const savedTheme = localStorage.getItem('theme') || 'light';
-    document.body.setAttribute('data-theme', savedTheme);
-
-    const themeToggle = document.getElementById('theme-toggle');
-    if (themeToggle) {
-        themeToggle.checked = savedTheme === 'dark';
-
-        const applyTheme = (theme) => {
-            document.body.classList.add('theme-transition');
-            void document.body.offsetWidth; // force reflow before theme change
-            document.body.setAttribute('data-theme', theme);
-            localStorage.setItem('theme', theme);
-            setTimeout(() => {
-                document.body.classList.remove('theme-transition');
-            }, 300);
-        };
-
-        themeToggle.addEventListener('click', function () {
-            applyTheme(this.checked ? 'dark' : 'light');
-        });
-    }
 });
 
 

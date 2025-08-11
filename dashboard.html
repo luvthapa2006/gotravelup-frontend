@@ -1,13 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script>
-    // Apply saved theme instantly before page renders
-    (function() {
-      const savedTheme = localStorage.getItem('theme') || 'light';
-      document.documentElement.setAttribute('data-theme', savedTheme);
-    })();
-  </script>
+<script>
+// Apply saved theme instantly before page renders
+(function() {
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    console.log('Applying saved theme on load:', savedTheme);
+    
+    if (savedTheme === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        document.body.setAttribute('data-theme', 'dark');
+    } else {
+        document.documentElement.removeAttribute('data-theme');
+        document.body.removeAttribute('data-theme');
+    }
+})();
+</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - Good to Go</title>
@@ -408,7 +416,9 @@
     <script>
 // ✅ NEW FUNCTION: Reads the saved theme and updates the radio buttons
 function updateThemeModalSelection() {
-    const savedTheme = localStorage.getItem('theme') || 'auto';
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    console.log('Setting modal selection to:', savedTheme);
+    
     const themeRadio = document.querySelector(`input[name="theme"][value="${savedTheme}"]`);
     if (themeRadio) {
         themeRadio.checked = true;
@@ -893,26 +903,37 @@ function checkPaymentStatus(transactionId) {
             window.open(`https://t.me/share/url?url=goodtogo.com&text=${encodeURIComponent(message)}`);
         }
 
-        function applyTheme() {
-            const selectedTheme = document.querySelector('input[name="theme"]:checked').value;
-            localStorage.setItem('theme', selectedTheme);
-            
-            if (selectedTheme === 'dark') {
-                document.body.setAttribute('data-theme', 'dark');
-            } else if (selectedTheme === 'light') {
-                document.body.removeAttribute('data-theme');
-            } else {
-                // Auto theme - detect system preference
-                if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-                    document.body.setAttribute('data-theme', 'dark');
-                } else {
-                    document.body.removeAttribute('data-theme');
-                }
-            }
-            document.getElementById('applyTheme').blur();
-            bootstrap.Modal.getInstance(document.getElementById('themeModal')).hide();
-            //showAlert('success', 'Theme applied successfully!');
+function applyTheme() {
+    const selectedTheme = document.querySelector('input[name="theme"]:checked').value;
+    console.log('Applying theme:', selectedTheme);
+    
+    // Save to localStorage
+    localStorage.setItem('theme', selectedTheme);
+    
+    // Apply theme immediately
+    if (selectedTheme === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        document.body.setAttribute('data-theme', 'dark');
+    } else if (selectedTheme === 'light') {
+        document.documentElement.removeAttribute('data-theme');
+        document.body.removeAttribute('data-theme');
+    } else if (selectedTheme === 'auto') {
+        // Auto theme - detect system preference
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (prefersDark) {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            document.body.setAttribute('data-theme', 'dark');
+        } else {
+            document.documentElement.removeAttribute('data-theme');
+            document.body.removeAttribute('data-theme');
         }
+    }
+    
+    // Close modal and show feedback
+    document.getElementById('applyTheme').blur();
+    bootstrap.Modal.getInstance(document.getElementById('themeModal')).hide();
+    showAlert('success', 'Theme applied successfully!');
+}
 
         async function signOut() {
             try {
