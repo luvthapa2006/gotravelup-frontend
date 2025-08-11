@@ -1,4 +1,4 @@
-/* Good to Go - Custom Styles */
+/* Good to Go - Custom Styles (CLEANED & OPTIMIZED) */
 
 :root {
     --primary-color: #007bff;
@@ -36,13 +36,27 @@ body {
     line-height: 1.6;
     color: var(--text-primary);
     overflow-x: hidden;
-    transition: all 0.3s ease;
-    -webkit-text-size-adjust: 100%; /* Prevent iOS text scaling */
-    touch-action: manipulation; /* Improve touch responsiveness */
+    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+    -webkit-text-size-adjust: 100%;
+    touch-action: manipulation;
 }
 
 [data-theme="dark"] body {
     background-color: var(--dark-color);
+}
+
+/* ============================================= */
+/* COMPONENTS WITH CONSISTENT TRANSITIONS */
+/* ============================================= */
+
+.profile-card,
+.trip-card,
+.feature-card,
+.destination-card,
+.modal-content,
+.navbar,
+.dashboard-content-wrapper {
+    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, border-color 0.2s ease-in-out;
 }
 
 /* Custom Button Styles */
@@ -52,9 +66,9 @@ body {
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    transition: all 0.3s ease;
-    touch-action: manipulation; /* Improve touch responsiveness */
-    -webkit-tap-highlight-color: transparent; /* Remove iOS tap highlight */
+    transition: all 0.2s ease-in-out;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .btn-primary {
@@ -109,6 +123,7 @@ body {
     text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
 }
 
+/* Animations */
 @keyframes fadeOut {
     0% { opacity: 1; visibility: visible; }
     90% { opacity: 1; }
@@ -138,51 +153,9 @@ body {
     }
 }
 
-/* Main Content */
-.main-content {
-    opacity: 0;
-    animation: fadeIn 1s ease-out 3s forwards;
-}
-
 @keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
-}
-
-/* Hero Section */
-.hero-section {
-    position: relative;
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    overflow: hidden;
-}
-
-.hero-bg {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&h=1080&fit=crop') center/cover;
-    filter: blur(2px);
-}
-
-
-
-.hero-content {
-    position: relative;
-    z-index: 2;
-}
-
-.hero-title {
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-    animation: slideInDown 1s ease-out 3.5s both;
-}
-
-.hero-subtitle {
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
-    animation: slideInUp 1s ease-out 4s both;
 }
 
 @keyframes slideInDown {
@@ -207,12 +180,51 @@ body {
     }
 }
 
+/* Main Content */
+.main-content {
+    opacity: 0;
+    animation: fadeIn 1s ease-out 3s forwards;
+}
+
+/* Hero Section */
+.hero-section {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+}
+
+.hero-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&h=1080&fit=crop') center/cover;
+    filter: blur(2px);
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+}
+
+.hero-title {
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    animation: slideInDown 1s ease-out 3.5s both;
+}
+
+.hero-subtitle {
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+    animation: slideInUp 1s ease-out 4s both;
+}
+
 /* Feature Cards */
 .feature-card {
     background: white;
     border-radius: var(--border-radius);
     box-shadow: var(--shadow);
-    transition: all 0.3s ease;
     border: none;
     height: 100%;
     color: #333;
@@ -259,7 +271,6 @@ body {
     border-radius: var(--border-radius);
     box-shadow: var(--shadow);
     overflow: hidden;
-    transition: all 0.3s ease;
     height: 100%;
 }
 
@@ -318,6 +329,15 @@ body {
     min-height: 100vh;
 }
 
+.dashboard-content-wrapper {
+    background-color: #f8f9fa;
+}
+
+[data-theme="dark"] .dashboard-content-wrapper {
+    background-color: var(--dark-color);
+    color: var(--text-primary);
+}
+
 .profile-card {
     background: white;
     border-radius: var(--border-radius);
@@ -327,7 +347,20 @@ body {
 }
 
 [data-theme="dark"] .profile-card {
-    background: var(--light-color);
+    background-color: var(--light-color);
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .profile-card .text-muted {
+    color: var(--text-secondary) !important;
+}
+
+[data-theme="dark"] .text-muted {
+    color: var(--text-secondary) !important;
+}
+
+[data-theme="dark"] h2 {
+    color: var(--text-primary);
 }
 
 .profile-avatar {
@@ -352,7 +385,6 @@ body {
     border-radius: var(--border-radius);
     box-shadow: var(--shadow);
     overflow: hidden;
-    transition: all 0.3s ease;
     height: 100%;
 }
 
@@ -362,7 +394,12 @@ body {
 }
 
 [data-theme="dark"] .trip-card {
-    background: var(--light-color);
+    background-color: var(--light-color);
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .trip-card .text-muted {
+    color: var(--text-secondary) !important;
 }
 
 .trip-image {
@@ -514,7 +551,7 @@ footer .text-muted {
     color: #e2e8f0 !important;
 }
 
-/* Animations */
+/* Animation utilities */
 .animate-fade-in {
     animation: fadeIn 0.5s ease-out;
 }
@@ -527,7 +564,85 @@ footer .text-muted {
     animation: slideInDown 0.5s ease-out;
 }
 
-/* Responsive Design */
+/* Form Validation */
+.was-validated .form-control:valid {
+    border-color: var(--success-color);
+}
+
+.was-validated .form-control:invalid {
+    border-color: var(--danger-color);
+}
+
+.valid-feedback {
+    color: var(--success-color);
+}
+
+.invalid-feedback {
+    color: var(--danger-color);
+}
+
+/* Modal Enhancements */
+.modal-content {
+    border-radius: var(--border-radius);
+    border: none;
+    box-shadow: var(--shadow-lg);
+}
+
+[data-theme="dark"] .modal-content {
+    background-color: var(--light-color);
+    color: var(--text-primary);
+}
+
+/* Loading Spinner */
+.spinner-border-sm {
+    width: 1rem;
+    height: 1rem;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-dark);
+}
+
+/* Utilities */
+.text-shadow {
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+.box-shadow {
+    box-shadow: var(--shadow);
+}
+
+.box-shadow-lg {
+    box-shadow: var(--shadow-lg);
+}
+
+.border-radius {
+    border-radius: var(--border-radius);
+}
+
+.border-radius-sm {
+    border-radius: var(--border-radius-sm);
+}
+
+/* ============================================= */
+/* RESPONSIVE DESIGN */
+/* ============================================= */
+
 @media (max-width: 992px) {
     .hero-title {
         font-size: 3rem;
@@ -540,6 +655,37 @@ footer .text-muted {
     .container {
         padding-left: 1rem;
         padding-right: 1rem;
+    }
+}
+
+@media (max-width: 991.98px) {
+    .navbar-collapse {
+        background-color: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(5px);
+        -webkit-backdrop-filter: blur(5px);
+        border-radius: var(--border-radius-sm);
+        padding: 1rem;
+        margin-top: 0.5rem;
+    }
+
+    .navbar-collapse .nav-link {
+        color: var(--dark-color) !important;
+    }
+    
+    .navbar-collapse .nav-link:hover {
+        color: var(--primary-color) !important;
+    }
+    
+    [data-theme="dark"] .navbar-collapse {
+        background-color: rgba(45, 55, 72, 0.95);
+    }
+    
+    [data-theme="dark"] .navbar-collapse .nav-link {
+        color: var(--text-primary) !important;
+    }
+    
+    [data-theme="dark"] .navbar-collapse .nav-link:hover {
+        color: var(--primary-color) !important;
     }
 }
 
@@ -612,11 +758,42 @@ footer .text-muted {
         min-width: 100px;
     }
     
-    /* Dashboard adjustments */
+    /* Mobile Avatar Fixes */
+    .profile-card .row {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    
+    .profile-card .col-auto {
+        width: 100%;
+        margin-bottom: 1rem;
+    }
+    
     .profile-avatar {
+        display: inline-block;
+        margin: 0 auto;
+    }
+    
+    .profile-avatar img {
         width: 80px;
         height: 80px;
-        margin: 0 auto 1rem;
+        border-radius: 50%;
+    }
+    
+    .profile-card .col {
+        text-align: center;
+        margin-bottom: 1rem;
+    }
+    
+    .profile-card .col-auto:last-child {
+        width: 100%;
+    }
+    
+    .referral-code {
+        width: 100%;
+        max-width: 280px;
+        margin: 0 auto;
     }
     
     /* Modal adjustments */
@@ -720,18 +897,6 @@ footer .text-muted {
         margin-bottom: 2rem;
     }
     
-    /* Navigation improvements */
-    .navbar-collapse {
-        background-color: rgba(255, 255, 255, 0.95);
-        margin-top: 0.5rem;
-        border-radius: 0.5rem;
-        padding: 1rem;
-    }
-    
-    [data-theme="dark"] .navbar-collapse {
-        background-color: rgba(45, 55, 72, 0.95);
-    }
-    
     /* Form input improvements */
     .form-control {
         font-size: 16px; /* Prevents zoom on iOS */
@@ -766,6 +931,15 @@ footer .text-muted {
     .modal-footer .btn {
         width: 100%;
     }
+    
+    /* Referral code mobile fixes */
+    .referral-code {
+        max-width: 100%;
+        margin: 0;
+        border-radius: var(--border-radius-sm);
+        padding: 1rem;
+        text-align: center;
+    }
 }
 
 /* Extra small devices */
@@ -793,105 +967,29 @@ footer .text-muted {
 
 /* Touch-friendly improvements */
 @media (hover: none) and (pointer: coarse) {
-    /* Touch device specific styles */
     .btn, .nav-link, .dropdown-toggle {
         min-height: 44px; /* Apple's recommended touch target size */
         padding: 0.75rem 1rem;
     }
     
-    .trip-card:hover,
-    .feature-card:hover,
-    .destination-card:hover {
-        transform: none; /* Disable hover transforms on touch devices */
+    /* Provide touch feedback instead of hover transforms */
+    .trip-card:active,
+    .feature-card:active,
+    .destination-card:active {
+        transform: scale(0.98);
+        transition: transform 0.1s ease;
     }
     
     .btn:active {
-        transform: scale(0.98); /* Touch feedback */
+        transform: scale(0.98);
     }
-}
-
-/* Loading Spinner */
-.spinner-border-sm {
-    width: 1rem;
-    height: 1rem;
-}
-
-/* Custom Scrollbar */
-::-webkit-scrollbar {
-    width: 8px;
-}
-
-::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb {
-    background: var(--primary-color);
-    border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: var(--primary-dark);
-}
-
-/* Utilities */
-.text-shadow {
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-}
-
-.box-shadow {
-    box-shadow: var(--shadow);
-}
-
-.box-shadow-lg {
-    box-shadow: var(--shadow-lg);
-}
-
-.border-radius {
-    border-radius: var(--border-radius);
-}
-
-.border-radius-sm {
-    border-radius: var(--border-radius-sm);
-}
-
-/* Form Validation */
-.was-validated .form-control:valid {
-    border-color: var(--success-color);
-}
-
-.was-validated .form-control:invalid {
-    border-color: var(--danger-color);
-}
-
-.valid-feedback {
-    color: var(--success-color);
-}
-
-.invalid-feedback {
-    color: var(--danger-color);
-}
-
-/* Modal Enhancements */
-.modal-content {
-    border-radius: var(--border-radius);
-    border: none;
-    box-shadow: var(--shadow-lg);
-}
-
-[data-theme="dark"] .modal-content {
-    background-color: var(--light-color);
-    color: var(--text-primary);
-}
-
-/* Theme Transitions */
-* {
-    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
-}
-
-body.theme-transition {
-    transition: background-color 0.3s ease, color 0.3s ease;
+    
+    /* Remove hover transforms on touch devices */
+    .trip-card:hover,
+    .feature-card:hover,
+    .destination-card:hover {
+        transform: none;
+    }
 }
 
 /* Print Styles */
@@ -906,83 +1004,5 @@ body.theme-transition {
     body {
         background: white;
         color: black;
-    }
-}
-/* ============================================= */
-/* == RESPONSIVE & THEME FIXES (Add to end of file) == */
-/* ============================================= */
-
-/*
- * Fix 1: Dark Theme Backgrounds & Text
- * Ensures the main dashboard body and cards use the correct
- * dark theme colors and that all text remains visible.
- */
-/* This new wrapper handles the full-width dark background */
-.dashboard-content-wrapper {
-    background-color: var(--bs-light); /* Light theme background */
-    transition: background-color 0.3s ease;
-}
-
-[data-theme="dark"] .dashboard-content-wrapper {
-    background-color: var(--dark-color);/* Dark theme background */
-    color: var(--text-primary); 
-}
-
-[data-theme="dark"] .text-muted {
-    color: var(--text-secondary) !important;
-}
-
-/* Make section titles (h2) visible in dark mode */
-[data-theme="dark"] h2 {
-    color: var(--text-primary);
-}
-
-/* Ensure cards are a brighter dark color for contrast */
-[data-theme="dark"] .profile-card,
-[data-theme="dark"] .trip-card {
-    background-color: var(--light-color); /* This is a dark gray in dark mode */
-    color: var(--text-primary); /* Ensures text inside cards is light */
-}
-
-[data-theme="dark"] .profile-card .text-muted,
-[data-theme="dark"] .trip-card .text-muted {
-    color: var(--text-secondary) !important; /* Makes subtitles visible */
-}
-
-
-/*
- * Fix 2: Mobile Navbar Menu
- * This targets the expanded menu on smaller screens.
- */
-@media (max-width: 991.98px) {
-    /* For Light Theme (Default) */
-    .navbar-collapse {
-        background-color: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(5px);
-        -webkit-backdrop-filter: blur(5px);
-        border-radius: var(--border-radius-sm);
-        padding: 1rem;
-        margin-top: 0.5rem;
-    }
-
-    /* Make links dark when the light-themed menu is open */
-    .navbar-collapse .nav-link {
-        color: var(--dark-color) !important;
-    }
-    .navbar-collapse .nav-link:hover {
-        color: var(--primary-color) !important;
-    }
-    
-    /* For Dark Theme */
-    [data-theme="dark"] .navbar-collapse {
-        background-color: rgba(45, 55, 72, 0.95); /* A dark, blurry background */
-    }
-    
-    /* Make links light when the dark-themed menu is open */
-    [data-theme="dark"] .navbar-collapse .nav-link {
-        color: var(--text-primary) !important;
-    }
-    [data-theme="dark"] .navbar-collapse .nav-link:hover {
-        color: var(--primary-color) !important;
     }
 }
