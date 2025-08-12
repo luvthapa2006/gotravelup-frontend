@@ -435,6 +435,12 @@ body {
     box-shadow: var(--shadow-sm);
 }
 
+/* Add this new rule to blur the image on "Coming Soon" cards */
+.coming-soon-trip-image img {
+    filter: blur(4px);
+    transform: scale(1.1); /* Scales the image slightly to hide blurred edges */
+}
+
 .trip-card {
     background: white;
     border-radius: var(--border-radius);
