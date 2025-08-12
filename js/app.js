@@ -7,19 +7,25 @@ const GoodToGo = {
         this.setupEventListeners();
     },
 
-    showSplashScreen: function() {
-        // Show splash screen for 3 seconds, then fade out
-        setTimeout(() => {
-            const splashScreen = document.getElementById('splashScreen');
-            const mainContent = document.getElementById('mainContent');
+showSplashScreen: function() {
+    // Show splash screen for 5 seconds to accommodate the new zoom-out animation
+    setTimeout(() => {
+        const splashScreen = document.getElementById('splashScreen');
+        const mainContent = document.getElementById('mainContent');
+        
+        if (splashScreen && mainContent) {
+            // The splash screen will fade out due to its CSS animation
+            // We just need to show the main content
+            mainContent.style.animation = 'fadeIn 1s ease-out forwards';
+            mainContent.style.opacity = '1';
             
-            if (splashScreen && mainContent) {
-                splashScreen.style.animation = 'fadeOut 1s ease-out forwards';
-                mainContent.style.animation = 'fadeIn 1s ease-out forwards';
-                mainContent.style.opacity = '1';
-            }
-        }, 3000);
-    },
+            // Hide splash screen completely after animation
+            setTimeout(() => {
+                splashScreen.style.display = 'none';
+            }, 1000);
+        }
+    }, 5000); // Increased to 5 seconds to allow for the full logo zoom-out effect
+},
 
     setupEventListeners: function() {
         // Smooth scrolling for anchor links
