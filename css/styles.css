@@ -89,7 +89,8 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(135deg, #0E1A2B 0%, #0E1A2B 100%);
+    /* background: linear-gradient(135deg, #0E1A2B 0%, #0E1A2B 100%); */
+    background: #212936;
     display: flex;
     align-items: center;
     justify-content: center;
