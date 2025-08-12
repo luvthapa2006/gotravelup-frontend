@@ -534,7 +534,7 @@ function createTripCard(trip) {
     const discount = Math.round(((trip.originalPrice - trip.salePrice) / trip.originalPrice) * 100);
     const imageUrl = `${API_BASE}${trip.image}`;
 
-    col.innerHTML = `
+   /* col.innerHTML = `
         <div class="trip-card">
             <div class="trip-image">
                 <img src="${imageUrl}" alt="${trip.destination}">
@@ -554,6 +554,33 @@ function createTripCard(trip) {
                 </div>
                 <button class="btn btn-primary w-100 mt-3" data-trip='${JSON.stringify(trip)}' onclick="bookTrip(this)">
                     <i class="fas fa-check me-1"></i> Book Now
+                </button>
+            </div>
+        </div>
+    `;*/
+
+        col.innerHTML = `
+        <div class="trip-card">
+            <div class="trip-image">
+                <div class="trip-coming-soon-banner">Coming Soon</div>
+
+                <img src="${imageUrl}" alt="${trip.destination}">
+                <div class="trip-badge">
+                    <span class="badge bg-success">${discount}% OFF</span>
+                </div>
+            </div>
+            <div class="trip-content">
+                <h5 class="trip-title">${trip.destination}</h5>
+                <p class="trip-date">
+                    <i class="fas fa-calendar me-1"></i> ${new Date(trip.date).toDateString()}
+                </p>
+                <p class="trip-description">${trip.description}</p>
+                <div class="trip-pricing">
+                    <span class="original-price">₹${trip.originalPrice}</span>
+                    <span class="sale-price">₹${trip.salePrice}</span>
+                </div>
+                <button class="btn btn-primary w-100 mt-3" disabled>
+                    <i class="fas fa-hourglass-start me-1"></i> Coming Soon
                 </button>
             </div>
         </div>

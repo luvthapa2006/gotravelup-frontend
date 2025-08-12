@@ -418,6 +418,23 @@ body {
 }
 
 /* Trip Cards */
+
+/* Add this to styles.css */
+.trip-coming-soon-banner {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    background-color: var(--warning-color);
+    color: var(--dark-color);
+    padding: 0.3rem 0.75rem;
+    border-radius: var(--border-radius-sm);
+    font-size: 0.8rem;
+    font-weight: 700;
+    z-index: 2;
+    text-transform: uppercase;
+    box-shadow: var(--shadow-sm);
+}
+
 .trip-card {
     background: white;
     border-radius: var(--border-radius);
