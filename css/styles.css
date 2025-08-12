@@ -129,7 +129,8 @@ body {
     bottom: 120px;
     left: 50%;
     transform: translateX(-50%);
-    animation: fadeInUp 1s ease-out;
+    /* MODIFIED: Added fadeOutText animation */
+    animation: fadeInUp 1s ease-out, fadeOutText 0.5s ease-in 2s forwards;
     text-align: center;
     width: 100%;
 }
@@ -142,7 +143,8 @@ body {
     bottom: 80px;
     left: 50%;
     transform: translateX(-50%);
-    animation: fadeInUp 1s ease-out 0.5s both;
+    /* MODIFIED: Added fadeOutText animation */
+    animation: fadeInUp 1s ease-out 0.5s both, fadeOutText 0.5s ease-in 2s forwards;
     text-align: center;
     width: 100%;
 }
@@ -181,6 +183,14 @@ body {
     0% { opacity: 1; visibility: visible; }
     90% { opacity: 1; }
     100% { opacity: 0; visibility: hidden; }
+}
+
+/* ADDED: New keyframe to hide text */
+@keyframes fadeOutText {
+    to {
+        opacity: 0;
+        visibility: hidden;
+    }
 }
 
 @keyframes fadeInUp {
