@@ -112,7 +112,7 @@ body {
     width: 120px;
     height: 120px;
     margin-bottom: 1rem;
-    animation: logoZoomOut 3s ease-in-out 2s forwards, bounce 2s infinite;
+    animation: logoBounce 2s ease-in-out, logoZoomOut 2s ease-in-out 2s forwards;
     transform-origin: center center;
     position: absolute;
     top: 50%;
@@ -148,17 +148,30 @@ body {
 }
 
 /* New Animations */
+@keyframes logoBounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translate(-50%, -50%) scale(1);
+    }
+    40% {
+        transform: translate(-50%, -50%) translateY(-10px) scale(1);
+    }
+    60% {
+        transform: translate(-50%, -50%) translateY(-5px) scale(1);
+    }
+}
+
+/* New Animations */
 @keyframes logoZoomOut {
     0% { 
         transform: translate(-50%, -50%) scale(1);
         opacity: 1;
     }
-    80% {
-        transform: translate(-50%, -50%) scale(1);
-        opacity: 1;
+    50% {
+        transform: translate(-50%, -50%) scale(2);
+        opacity: 0.8;
     }
     100% { 
-        transform: translate(-50%, -50%) scale(5);
+        transform: translate(-50%, -50%) scale(10);
         opacity: 0;
     }
 }
@@ -181,17 +194,7 @@ body {
     }
 }
 
-@keyframes bounce {
-    0%, 20%, 50%, 80%, 100% {
-        transform: translate(-50%, -50%) translateY(0);
-    }
-    40% {
-        transform: translate(-50%, -50%) translateY(-10px);
-    }
-    60% {
-        transform: translate(-50%, -50%) translateY(-5px);
-    }
-}
+
 
 @keyframes fadeIn {
     from { opacity: 0; }

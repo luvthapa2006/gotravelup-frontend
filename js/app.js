@@ -8,7 +8,7 @@ const GoodToGo = {
     },
 
 showSplashScreen: function() {
-    // Show splash screen for 5 seconds to accommodate the new zoom-out animation
+    // Show splash screen for 4 seconds total (2s bounce + 2s zoom-out)
     setTimeout(() => {
         const splashScreen = document.getElementById('splashScreen');
         const mainContent = document.getElementById('mainContent');
@@ -24,7 +24,7 @@ showSplashScreen: function() {
                 splashScreen.style.display = 'none';
             }, 1000);
         }
-    }, 5000); // Increased to 5 seconds to allow for the full logo zoom-out effect
+    }, 4000); // 4 seconds total for the complete sequence
 },
 
     setupEventListeners: function() {
