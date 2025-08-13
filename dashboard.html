@@ -534,7 +534,7 @@ function createTripCard(trip) {
     const discount = Math.round(((trip.originalPrice - trip.salePrice) / trip.originalPrice) * 100);
     const imageUrl = `${API_BASE}${trip.image}`;
 
-   /* col.innerHTML = `
+      col.innerHTML = `
         <div class="trip-card">
             <div class="trip-image">
                 <img src="${imageUrl}" alt="${trip.destination}">
@@ -557,9 +557,9 @@ function createTripCard(trip) {
                 </button>
             </div>
         </div>
-    `;*/
+    `;
 
-    col.innerHTML = `
+    /*col.innerHTML = `
         <div class="trip-card">
             <div class="trip-image coming-soon-trip-image"> 
                 <div class="trip-coming-soon-banner">Coming Soon</div>
@@ -576,7 +576,7 @@ function createTripCard(trip) {
                 </button>
             </div>
         </div>
-    `;
+    `;*/
 
     return col;
 }
