@@ -741,21 +741,23 @@ async function loadMyTrips() {
         const data = await response.json();
         
         if (data.success) {
-            // Clear and populate the Set of booked trip IDs
             bookedTripIds.clear();
             data.bookings.forEach(booking => {
                 bookedTripIds.add(booking.tripId.toString());
             });
             displayMyTrips(data.bookings);
+            
+            // FIX: Only load all trips AFTER successfully loading my trips.
+            loadTrips(); 
         }
     } catch (error) {
         console.error('Error loading my trips:', error);
-    } finally {
-        // IMPORTANT: Load all trips AFTER we know which ones are booked
-        loadTrips();
+        // If "my trips" fails to load, we stop and show an error
+        // instead of showing an incorrect UI.
+        document.getElementById('tripsContainer').innerHTML = 
+            '<p class="text-center text-danger">Could not verify your bookings. Please refresh.</p>';
     }
 }
-
         function displayMyTrips(bookings) {
             const container = document.getElementById('myTripsContainer');
             
@@ -954,8 +956,8 @@ function bookTrip(buttonElement) {
                 });
                 
                 const data = await response.json();
-                
-                if (data.success) {
+
+                if (response.ok) {
                     // Update wallet balance
                     currentUser.wallet = data.newWalletBalance;
                     document.getElementById('walletAmount').textContent = data.newWalletBalance;
