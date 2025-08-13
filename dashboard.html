@@ -358,6 +358,26 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="tripDetailsModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Trip Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <h4 id="detailsTripName"></h4>
+                <p class="text-muted" id="detailsBookingDate"></p>
+                <p><strong>Status:</strong> <span class="badge" id="detailsBookingStatus"></span></p>
+                <p><strong>Amount Paid:</strong> ₹<span id="detailsTripAmount"></span></p>
+                <hr>
+                <button id="cancelTripBtn" class="btn btn-danger w-100">
+                    <i class="fas fa-ban me-2"></i>Cancel & Request Refund
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="modal fade" id="qrCodeModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -406,6 +426,49 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="js/auth.js"></script>
     <script>
+       function showTripDetailsModal(booking) {
+    // Populate modal with booking data
+    document.getElementById('detailsTripName').textContent = booking.destination;
+    document.getElementById('detailsBookingDate').textContent = `Booked on ${new Date(booking.bookedAt).toLocaleDateString()}`;
+    document.getElementById('detailsTripAmount').textContent = booking.amount;
+
+    const statusBadge = document.getElementById('detailsBookingStatus');
+    const cancelBtn = document.getElementById('cancelTripBtn');
+
+    statusBadge.textContent = booking.status;
+    if (booking.status === 'active') {
+        statusBadge.className = 'badge bg-success';
+        cancelBtn.disabled = false;
+        cancelBtn.onclick = () => handleTripCancellation(booking._id);
+    } else {
+        statusBadge.className = 'badge bg-warning text-dark';
+        cancelBtn.disabled = true;
+    }
+
+    const modal = new bootstrap.Modal(document.getElementById('tripDetailsModal'));
+    modal.show();
+}
+
+async function handleTripCancellation(bookingId) {
+    if (!confirm('Are you sure you want to cancel this trip? A refund request will be sent to the admin.')) return;
+
+    try {
+        const response = await fetch(`${API_BASE}/api/bookings/${bookingId}/cancel`, {
+            method: 'POST',
+            credentials: 'include'
+        });
+        const data = await response.json();
+        if (response.ok) {
+            showAlert('success', data.message);
+            bootstrap.Modal.getInstance(document.getElementById('tripDetailsModal')).hide();
+            loadMyTrips(); // Refresh the list
+        } else {
+            showAlert('error', data.message);
+        }
+    } catch (error) {
+        showAlert('error', 'A network error occurred.');
+    }
+} 
 // ✅ NEW FUNCTION: Reads the saved theme and updates the radio buttons
 function updateThemeModalSelection() {
     const savedTheme = localStorage.getItem('theme') || 'light';
@@ -619,35 +682,36 @@ async function loadMyTrips() {
                 container.appendChild(bookingCard);
             });
         }
-
-        function createBookingCard(booking) {
-            const col = document.createElement('div');
-            col.className = 'col-md-6 col-lg-4';
-            
-            const bookingDate = new Date(booking.bookedAt).toLocaleDateString('en-IN');
-            
-            col.innerHTML = `
-                <div class="trip-card">
-                    <div class="trip-content">
-                        <div class="d-flex justify-content-between align-items-start mb-2">
-                            <h5 class="trip-title">${booking.destination}</h5>
-                            <span class="badge bg-success">${booking.status}</span>
-                        </div>
-                        <p class="text-muted mb-2">
-                            <i class="fas fa-calendar me-1"></i> Booked on ${bookingDate}
-                        </p>
-                        <p class="text-muted mb-3">
-                            <i class="fas fa-money-bill me-1"></i> Amount: ₹${booking.amount}
-                        </p>
-                        <button class="btn btn-outline-primary w-100">
-                            <i class="fas fa-eye me-1"></i> View Details
-                        </button>
-                    </div>
+// In createBookingCard function
+function createBookingCard(booking) {
+    const col = document.createElement('div');
+    col.className = 'col-md-6 col-lg-4';
+    
+    const bookingDate = new Date(booking.bookedAt).toLocaleDateString('en-IN');
+    
+    // The button is now part of the card's content, and the booking info is stored on the parent card element.
+    col.innerHTML = `
+        <div class="trip-card" data-booking-info='${JSON.stringify(booking)}'>
+            <div class="trip-content">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                    <h5 class="trip-title">${booking.destination}</h5>
+                    <span class="badge bg-success">${booking.status}</span>
                 </div>
-            `;
-            
-            return col;
-        }
+                <p class="text-muted mb-2">
+                    <i class="fas fa-calendar me-1"></i> Booked on ${bookingDate}
+                </p>
+                <p class="text-muted mb-3">
+                    <i class="fas fa-money-bill me-1"></i> Amount: ₹${booking.amount}
+                </p>
+                <button class="btn btn-outline-primary w-100 view-details-btn">
+                    <i class="fas fa-eye me-1"></i> View Details
+                </button>
+            </div>
+        </div>
+    `;
+
+    return col;
+}
 
 // ✅ PASTE THIS NEW CODE IN ITS PLACE
 function bookTrip(buttonElement) {
@@ -717,6 +781,15 @@ function bookTrip(buttonElement) {
             });
             
             document.getElementById('continuePaymentBtn').addEventListener('click', handlePayment);
+
+            // Event delegation for My Trips "View Details"
+    document.getElementById('myTripsContainer').addEventListener('click', (e) => {
+        if (e.target.classList.contains('view-details-btn')) {
+            const card = e.target.closest('.trip-card');
+            const bookingData = JSON.parse(card.dataset.bookingInfo);
+            showTripDetailsModal(bookingData);
+        }
+    });
         }
 
         function setupTripFilters() {

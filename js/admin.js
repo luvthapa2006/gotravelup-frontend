@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const usersContainer = document.getElementById('usersContainer');
     const transactionsContainer = document.getElementById('transactionsContainer');
     const bookingsModalContainer = document.getElementById('bookingsModalContainer');
+    const refundsContainer = document.getElementById('refundsContainer');
 
     // Forms & Buttons
     const addTripForm = document.getElementById('addTripForm');
@@ -16,42 +17,35 @@ document.addEventListener('DOMContentLoaded', () => {
     const refreshPaymentsBtn = document.getElementById('refreshPaymentsBtn');
 
     // Initial password prompt
-// Replace the old askForPassword function with this one
-async function askForPassword() {
-    adminPassword = prompt("Please enter the admin password:");
+    async function askForPassword() {
+        adminPassword = prompt("Please enter the admin password:");
 
-    if (!adminPassword) {
-        // Handle case where user clicks "Cancel" on the prompt
-        alert("Password is required to access this page.");
-        document.body.innerHTML = '<div class="alert alert-danger text-center m-5">Access Denied.</div>';
-        return;
-    }
-
-    try {
-        // First, send the password to the new verification endpoint
-        const response = await fetch(`${API_BASE}/api/admin/verify`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ password: adminPassword })
-        });
-
-        // Only proceed if the backend confirms the password is OK (status 200)
-        if (response.ok) {
-            adminContent.classList.remove('d-none'); // Show the admin panel
-            loadAllData(); // Load all the data
-        } else {
-            // If the password is wrong, the backend returns a 401 error.
-            // The page will remain blank because we don't remove the 'd-none' class.
-            alert("Incorrect password. Access has been denied.");
-            // Optionally, you can clear the body to ensure it's completely empty.
-            document.body.innerHTML = ''; 
+        if (!adminPassword) {
+            alert("Password is required to access this page.");
+            document.body.innerHTML = '<div class="alert alert-danger text-center m-5">Access Denied.</div>';
+            return;
         }
-    } catch (error) {
-        console.error('Error during password verification:', error);
-        alert('Could not connect to the server. Please try again later.');
-        document.body.innerHTML = '<div class="alert alert-danger text-center m-5">Server Connection Error.</div>';
+
+        try {
+            const response = await fetch(`${API_BASE}/api/admin/verify`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ password: adminPassword })
+            });
+
+            if (response.ok) {
+                adminContent.classList.remove('d-none');
+                loadAllData();
+            } else {
+                alert("Incorrect password. Access has been denied.");
+                document.body.innerHTML = ''; 
+            }
+        } catch (error) {
+            console.error('Error during password verification:', error);
+            alert('Could not connect to the server. Please try again later.');
+            document.body.innerHTML = '<div class="alert alert-danger text-center m-5">Server Connection Error.</div>';
+        }
     }
-}
 
     function getAuthHeaders(isGetRequest = false) {
         const headers = new Headers();
@@ -70,6 +64,7 @@ async function askForPassword() {
         loadTrips();
         loadUsers();
         loadPendingTransactions();
+        loadRefundRequests();
     }
     
     async function loadTrips() {
@@ -152,6 +147,7 @@ async function askForPassword() {
                         <td>${new Date(tx.createdAt).toLocaleString()}</td>
                         <td>
                             <button class="btn btn-sm btn-success approve-btn" data-id="${tx._id}">Approve</button>
+                            <button class="btn btn-sm btn-danger deny-btn ms-1" data-id="${tx._id}">Deny</button>
                         </td>
                     `;
                     transactionsContainer.appendChild(tr);
@@ -165,11 +161,41 @@ async function askForPassword() {
         }
     }
 
+    async function loadRefundRequests() {
+        try {
+            const response = await fetch(`${API_BASE}/api/admin/refunds`, {
+                headers: getAuthHeaders(true)
+            });
+            const data = await response.json();
+            refundsContainer.innerHTML = '';
+            if(data.success) {
+                if(data.refunds.length === 0) {
+                    refundsContainer.innerHTML = '<tr><td colspan="5" class="text-center">No pending refund requests.</td></tr>';
+                    return;
+                }
+                data.refunds.forEach(refund => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${refund.userId.name}</td>
+                        <td>${refund.tripDestination}</td>
+                        <td>${refund.amount}</td>
+                        <td>${new Date(refund.requestedAt).toLocaleString()}</td>
+                        <td><button class="btn btn-sm btn-primary approve-refund-btn" data-id="${refund._id}">Approve Refund</button></td>
+                    `;
+                    refundsContainer.appendChild(tr);
+                });
+            }
+        } catch (error) {
+            console.error('Error loading refunds:', error);
+            refundsContainer.innerHTML = '<tr><td colspan="5" class="text-danger">Failed to load refunds.</td></tr>';
+        }
+    }
+
     // --- EVENT HANDLERS ---
     addTripForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const formData = new FormData(addTripForm);
-        formData.append('password', adminPassword); // Add password for authentication
+        formData.append('password', adminPassword);
 
         try {
             const response = await fetch(`${API_BASE}/api/admin/trips`, {
@@ -191,9 +217,7 @@ async function askForPassword() {
     });
 
     downloadUsersBtn.addEventListener('click', () => {
-        // Construct the URL with the password as a query parameter
         const downloadUrl = `${API_BASE}/api/admin/users/download`;
-        // Use fetch to handle headers correctly for authentication
         fetch(downloadUrl, { headers: getAuthHeaders(true) })
             .then(res => res.blob())
             .then(blob => {
@@ -211,13 +235,12 @@ async function askForPassword() {
 
     refreshPaymentsBtn.addEventListener('click', loadPendingTransactions);
     
-    // Event delegation for dynamically created buttons
+    // Event delegation for all dynamically created buttons
     document.body.addEventListener('click', async (e) => {
-        // Approve Payment
+        
+        // Approve Payment Transaction
         if (e.target.classList.contains('approve-btn')) {
             const transactionId = e.target.dataset.id;
-            if(!confirm('Are you sure you want to approve this transaction?')) return;
-            
             try {
                 const response = await fetch(`${API_BASE}/api/wallet/confirm-transaction/${transactionId}`, {
                     method: 'POST',
@@ -226,15 +249,50 @@ async function askForPassword() {
                 });
                 const data = await response.json();
                 if(data.success) {
-                    alert('Transaction approved!');
+                    alert('Payment approved!');
                     loadPendingTransactions();
-                    loadUsers(); // Refresh users to show updated wallet balance
-                } else {
-                    alert(`Error: ${data.message}`);
-                }
-            } catch (error) {
-                alert('An error occurred.');
-            }
+                    loadUsers();
+                } else { alert(`Error: ${data.message}`); }
+            } catch (error) { alert('An error occurred.'); }
+        }
+
+        // Deny Payment Transaction
+        if (e.target.classList.contains('deny-btn')) {
+            const transactionId = e.target.dataset.id;
+            if(!confirm('Deny and DELETE this pending transaction? This cannot be undone.')) return;
+
+            try {
+                const response = await fetch(`${API_BASE}/api/admin/transactions/${transactionId}`, {
+                    method: 'DELETE',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(getAuthBody())
+                });
+                const data = await response.json();
+                if(data.success) {
+                    alert('Transaction denied and deleted!');
+                    loadPendingTransactions();
+                } else { alert(`Error: ${data.message}`); }
+            } catch (error) { alert('An error occurred.'); }
+        }
+
+        // Approve Refund
+        if (e.target.classList.contains('approve-refund-btn')) {
+            const refundId = e.target.dataset.id;
+            if(!confirm('Approve this refund? The amount will be added to the user\'s wallet.')) return;
+
+            try {
+                const response = await fetch(`${API_BASE}/api/admin/refunds/${refundId}/approve`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(getAuthBody())
+                });
+                const data = await response.json();
+                if(data.success) {
+                    alert('Refund approved!');
+                    loadRefundRequests();
+                    loadUsers(); // Refresh user list for updated wallet balances
+                } else { alert(`Error: ${data.message}`); }
+            } catch (error) { alert('An error occurred.'); }
         }
         
         // Delete Trip
