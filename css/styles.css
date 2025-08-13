@@ -3,7 +3,9 @@
 :root {
     --primary-color: #007bff;
     --primary-dark: #0056b3;
-    --success-color: #28a745;
+    --success-color: #f59e0b;
+    --background-light: #F8F5F2; 
+    --card-background: #FFFFFF;
     --warning-color: #ffc107;
     --danger-color: #dc3545;
     --light-color: #f8f9fa;
@@ -77,9 +79,20 @@ body {
     box-shadow: var(--shadow);
 }
 
+.btn-success:hover {
+    background: #d97706; /* A slightly darker amber for hover */
+    border-color: #d97706;
+}
+
 .btn-primary:hover {
     transform: translateY(-2px);
     box-shadow: var(--shadow-lg);
+}
+
+.btn-success {
+    background: var(--success-color);
+    border-color: var(--success-color);
+    color: #fff;
 }
 
 /* Splash Screen */
@@ -253,11 +266,15 @@ body {
     animation: slideInUp 1s ease-out 4s both;
 }
 
+#about, 
+.py-5:not(.bg-dark) { /* This targets your sections */
+    background-color: var(--background-light);
+}
+
 /* Feature Cards */
 .feature-card {
-    background: white;
-    border-radius: var(--border-radius);
-    box-shadow: var(--shadow);
+    background: var(--card-background);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* Slightly softer shadow */
     border: none;
     height: 100%;
     color: #333;
@@ -300,11 +317,11 @@ body {
 
 /* Destination Cards */
 .destination-card {
-    background: white;
-    border-radius: var(--border-radius);
-    box-shadow: var(--shadow);
-    overflow: hidden;
+    background: var(--card-background);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* Slightly softer shadow */
+    border: none;
     height: 100%;
+    color: #333;
 }
 
 .destination-card:hover {
