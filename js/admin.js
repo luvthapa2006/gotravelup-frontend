@@ -176,12 +176,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 data.refunds.forEach(refund => {
                     const tr = document.createElement('tr');
                     tr.innerHTML = `
-                        <td>${refund.userId.name}</td>
-                        <td>${refund.tripDestination}</td>
-                        <td>${refund.amount}</td>
-                        <td>${new Date(refund.requestedAt).toLocaleString()}</td>
-                        <td><button class="btn btn-sm btn-primary approve-refund-btn" data-id="${refund._id}">Approve Refund</button></td>
-                    `;
+    <td>${refund.userId.name}</td>
+    <td>${refund.tripDestination}</td>
+    <td>${refund.amount}</td>
+    <td>${new Date(refund.requestedAt).toLocaleString()}</td>
+    <td>
+        <button class="btn btn-sm btn-primary approve-refund-btn" data-id="${refund._id}">Approve Refund</button>
+        <button class="btn btn-sm btn-secondary deny-refund-btn ms-1" data-id="${refund._id}">Deny</button>
+    </td>
+`;
                     refundsContainer.appendChild(tr);
                 });
             }
@@ -237,7 +240,23 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Event delegation for all dynamically created buttons
     document.body.addEventListener('click', async (e) => {
-        
+        if (e.target.classList.contains('deny-refund-btn')) {
+    const refundId = e.target.dataset.id;
+    if(!confirm('Are you sure you want to deny this refund? The user booking will be reactivated.')) return;
+
+    try {
+        const response = await fetch(`${API_BASE}/api/admin/refunds/${refundId}/deny`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(getAuthBody())
+        });
+        const data = await response.json();
+        if(data.success) {
+            alert('Refund denied!');
+            loadRefundRequests();
+        } else { alert(`Error: ${data.message}`); }
+    } catch (error) { alert('An error occurred.'); }
+}
         // Approve Payment Transaction
         if (e.target.classList.contains('approve-btn')) {
             const transactionId = e.target.dataset.id;

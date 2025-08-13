@@ -873,14 +873,14 @@ function bookTrip(buttonElement) {
                     loadMyTrips();
                 } else {
                     if (data.requiredAmount && data.currentBalance !== undefined) {
-                        GoodToGo.showAlert('warning', data.message);
+                        showAlert('warning', data.message);
                     } else {
-                        GoodToGo.showAlert('danger', data.message || 'Booking failed. Please try again.');
+                        showAlert('danger', data.message || 'Booking failed. Please try again.');
                     }
                 }
             } catch (error) {
                 console.error('Booking error:', error);
-                GoodToGo.showAlert('danger', 'Network error. Please try again.');
+                showAlert('danger', 'Network error. Please try again.');
             } finally {
                 continueBtn.disabled = false;
                 continueBtn.innerHTML = originalText;
