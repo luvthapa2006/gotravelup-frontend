@@ -16,16 +16,42 @@ document.addEventListener('DOMContentLoaded', () => {
     const refreshPaymentsBtn = document.getElementById('refreshPaymentsBtn');
 
     // Initial password prompt
-    function askForPassword() {
-        adminPassword = prompt("Please enter the admin password:");
-        if (adminPassword) {
-            adminContent.classList.remove('d-none');
-            loadAllData();
-        } else {
-            alert("Password is required to access this page.");
-            document.body.innerHTML = '<div class="alert alert-danger text-center m-5">Access Denied.</div>';
-        }
+// Replace the old askForPassword function with this one
+async function askForPassword() {
+    adminPassword = prompt("Please enter the admin password:");
+
+    if (!adminPassword) {
+        // Handle case where user clicks "Cancel" on the prompt
+        alert("Password is required to access this page.");
+        document.body.innerHTML = '<div class="alert alert-danger text-center m-5">Access Denied.</div>';
+        return;
     }
+
+    try {
+        // First, send the password to the new verification endpoint
+        const response = await fetch(`${API_BASE}/api/admin/verify`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ password: adminPassword })
+        });
+
+        // Only proceed if the backend confirms the password is OK (status 200)
+        if (response.ok) {
+            adminContent.classList.remove('d-none'); // Show the admin panel
+            loadAllData(); // Load all the data
+        } else {
+            // If the password is wrong, the backend returns a 401 error.
+            // The page will remain blank because we don't remove the 'd-none' class.
+            alert("Incorrect password. Access has been denied.");
+            // Optionally, you can clear the body to ensure it's completely empty.
+            document.body.innerHTML = ''; 
+        }
+    } catch (error) {
+        console.error('Error during password verification:', error);
+        alert('Could not connect to the server. Please try again later.');
+        document.body.innerHTML = '<div class="alert alert-danger text-center m-5">Server Connection Error.</div>';
+    }
+}
 
     function getAuthHeaders(isGetRequest = false) {
         const headers = new Headers();
