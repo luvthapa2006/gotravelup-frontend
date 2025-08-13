@@ -747,15 +747,16 @@ async function loadMyTrips() {
             });
             displayMyTrips(data.bookings);
             
-            // FIX: Only load all trips AFTER successfully loading my trips.
+            // FIX: Only load all trips AFTER successfully loading your own.
             loadTrips(); 
+        } else {
+            // If we can't get your trips, show an error instead of a broken UI.
+            throw new Error(data.message || "Could not verify your bookings.");
         }
     } catch (error) {
-        console.error('Error loading my trips:', error);
-        // If "my trips" fails to load, we stop and show an error
-        // instead of showing an incorrect UI.
+        console.error('Error in loadMyTrips:', error);
         document.getElementById('tripsContainer').innerHTML = 
-            '<p class="text-center text-danger">Could not verify your bookings. Please refresh.</p>';
+            '<p class="text-center text-danger">Could not load trips. Please refresh the page.</p>';
     }
 }
         function displayMyTrips(bookings) {
