@@ -659,7 +659,7 @@ function createTripCard(trip, isBooked) { // Note the new 'isBooked' parameter
     const col = document.createElement('div');
     col.className = 'col-md-6 col-lg-4';
 
-    const imageUrl = `${API_BASE}${trip.image}`;
+    const imageUrl = trip.image;
     const tripDate = new Date(trip.date);
     const now = new Date();
     

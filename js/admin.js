@@ -99,7 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
             trips.forEach(trip => {
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
-                    <td><img src="${API_BASE}${trip.image}" alt="${trip.destination}" width="100" class="img-thumbnail"></td>
+                    <td><img src="${trip.image}" alt="${trip.destination}" width="100" class="img-thumbnail"></td>
                     <td>${trip.destination}</td>
                     <td>${new Date(trip.date).toLocaleDateString()}</td>
                     <td>₹${trip.salePrice}</td>
