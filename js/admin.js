@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Forms & Buttons
     const addTripForm = document.getElementById('addTripForm');
     const downloadUsersBtn = document.getElementById('downloadUsersBtn');
-    const refreshPaymentsBtn = document.getElementById('refreshPaymentsBtn');
+    const refreshAllBtn = document.getElementById('refreshAllBtn');
 
     // Initial password prompt
     async function askForPassword() {
@@ -66,6 +66,30 @@ document.addEventListener('DOMContentLoaded', () => {
         loadPendingTransactions();
         loadRefundRequests();
     }
+
+     async function refreshAllData() {
+        const originalText = refreshAllBtn.innerHTML;
+        refreshAllBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Refreshing...';
+        refreshAllBtn.disabled = true;
+
+        try {
+            // Promise.all runs all data-loading functions at the same time for a faster refresh
+            await Promise.all([
+                loadTrips(),
+                loadUsers(),
+                loadPendingTransactions(),
+                loadRefundRequests()
+            ]);
+        } catch (error) {
+            console.error("Failed to refresh all data:", error);
+            alert("An error occurred while refreshing data.");
+        } finally {
+            // Restore the button to its original state
+            refreshAllBtn.innerHTML = originalText;
+            refreshAllBtn.disabled = false;
+        }
+    }
+
     
     async function loadTrips() {
         try {
@@ -236,7 +260,10 @@ document.addEventListener('DOMContentLoaded', () => {
             .catch(() => alert('Could not download file.'));
     });
 
-    refreshPaymentsBtn.addEventListener('click', loadPendingTransactions);
+    if (refreshAllBtn) {
+        refreshAllBtn.addEventListener('click', refreshAllData);
+    }
+
     
     // Event delegation for all dynamically created buttons
     document.body.addEventListener('click', async (e) => {
@@ -384,6 +411,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 <td>${user.email}</td>
                                 <td>${user.phone}</td>
                                 <td>${user.sapId}</td>
+                                <td>${new Date(booking.bookingDate).toLocaleString()}</td>
                             `;
                             bookingsModalContainer.appendChild(tr);
                         });
