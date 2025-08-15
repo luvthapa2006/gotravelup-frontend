@@ -1119,3 +1119,27 @@ footer .text-muted {
         color: black;
     }
 }
+/* Password Validation Checklist Styles */
+#passwordCriteria li {
+    transition: color 0.3s ease;
+}
+
+#passwordCriteria li.valid {
+    color: #198754; /* Bootstrap success green */
+    text-decoration: line-through;
+}
+
+#passwordCriteria li.valid .fa-times-circle {
+    display: none; /* Hide the X icon */
+}
+
+#passwordCriteria li:not(.valid) .fa-check-circle {
+    display: none; /* Hide the check icon */
+}
+
+#passwordCriteria li.valid::before {
+    content: "\f058"; /* Font Awesome check-circle icon */
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    margin-right: 0.5rem;
+}
