@@ -37,7 +37,9 @@
         <div class="col-md-6">
             <label for="name" class="form-label">Full Name *</label>
             <input type="text" class="form-control" id="name" name="name" required>
-            <div class="invalid-feedback">Please enter your full name.</div>
+            <div class="invalid-feedback">
+                <b>Please enter your full name.</b>
+            </div>
         </div>
 
         <div class="col-md-6">
@@ -54,19 +56,28 @@
         <div class="col-md-6">
             <label for="sapId" class="form-label">SAP ID *</label>
             <input type="text" class="form-control" id="sapId" name="sapId" placeholder="e.g., 500012345" required minlength="9" maxlength="9" pattern="[0-9]{9}">
-            <div class="invalid-feedback">SAP ID must be exactly 9 digits.</div>
+            <div class="invalid-feedback">
+                <b>Invalid SAP ID.</b>
+            </div>
         </div>
 
         <div class="col-md-6">
             <label for="email" class="form-label">Email Address *</label>
             <input type="email" class="form-control" id="email" name="email" placeholder="example@gmail.com" required pattern=".+@gmail\.com">
-            <div class="invalid-feedback">Please enter a valid @gmail.com address.</div>
+            <div class="invalid-feedback">
+                <b>Enter email with abcd@gmail.com format.</b>
+            </div>
         </div>
 
         <div class="col-md-6">
             <label for="phone" class="form-label">Phone Number *</label>
-            <input type="tel" class="form-control" id="phone" name="phone" placeholder="+919876543210" required pattern="\+91[0-9]{10}">
-            <div class="invalid-feedback">Must be a 10-digit number starting with +91.</div>
+            <b><div class="input-group">
+                <span class="input-group-text">+91</span>
+                <input type="tel" class="form-control" id="phone" name="phone" placeholder="9876543210" required pattern="[0-9]{10}" maxlength="10">
+                <div class="invalid-feedback">
+                    Enter a valid 10-digit phone number.
+                </div>
+            </div></b>
         </div>
         
         <div class="col-md-6">

@@ -97,7 +97,7 @@ class AuthManager {
         });
     }
 
-    // --- Signup Handler ---
+// --- Signup Handler ---
     async handleSignup(e) {
         e.preventDefault();
         const form = e.target;
@@ -115,6 +115,9 @@ class AuthManager {
         try {
             const formData = new FormData(form);
             const data = Object.fromEntries(formData.entries());
+
+            // ✅ ADD THIS LINE to prepend "+91" to the phone number
+            data.phone = "+91" + data.phone;
 
             const res = await fetch(`${API_BASE}/api/register`, {
                 method: 'POST',
