@@ -25,10 +25,20 @@ async function loadCurrentBackground() {
 if (backgroundForm) {
     backgroundForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const formData = new FormData(backgroundForm);
-        formData.append('password', adminPassword); // Add admin password for auth
+        const button = backgroundForm.querySelector('button[type="submit"]');
+        const spinner = button.querySelector('.spinner-border');
+        const buttonText = button.querySelector('.button-text');
+        const originalButtonText = buttonText.textContent;
+        
+        // Show loading state
+        button.disabled = true;
+        spinner.classList.remove('d-none');
+        buttonText.textContent = 'Uploading...';
 
         try {
+            const formData = new FormData(backgroundForm);
+            formData.append('password', adminPassword);
+
             const response = await fetch(`${API_BASE}/api/admin/settings/background`, {
                 method: 'POST',
                 body: formData
@@ -43,6 +53,11 @@ if (backgroundForm) {
             }
         } catch (error) {
             alert('An error occurred. Please try again.');
+        } finally {
+            // Hide loading state
+            button.disabled = false;
+            spinner.classList.add('d-none');
+            buttonText.textContent = originalButtonText;
         }
     });
 
@@ -295,29 +310,45 @@ editTripForm.addEventListener('submit', async (e) => {
     }
 });
     // --- EVENT HANDLERS ---
-    addTripForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
+addTripForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const button = addTripForm.querySelector('button[type="submit"]');
+    const spinner = button.querySelector('.spinner-border');
+    const buttonText = button.querySelector('.button-text');
+    const originalButtonText = buttonText.textContent;
+
+    // Show loading state
+    button.disabled = true;
+    spinner.classList.remove('d-none');
+    buttonText.textContent = 'Adding Trip...';
+
+    try {
         const formData = new FormData(addTripForm);
         formData.append('password', adminPassword);
 
-        try {
-            const response = await fetch(`${API_BASE}/api/admin/trips`, {
-                method: 'POST',
-                body: formData
-            });
-            const data = await response.json();
-            if(data.success) {
-                alert('Trip added successfully!');
-                addTripForm.reset();
-                loadTrips();
-            } else {
-                alert(`Error: ${data.message}`);
-            }
-        } catch (error) {
-            console.error('Error adding trip:', error);
-            alert('An error occurred. Please try again.');
+        const response = await fetch(`${API_BASE}/api/admin/trips`, {
+            method: 'POST',
+            body: formData
+        });
+        const data = await response.json();
+        
+        if (data.success) {
+            alert('Trip added successfully!');
+            addTripForm.reset();
+            loadTrips();
+        } else {
+            alert(`Error: ${data.message}`);
         }
-    });
+    } catch (error) {
+        console.error('Error adding trip:', error);
+        alert('An error occurred. Please try again.');
+    } finally {
+        // Hide loading state
+        button.disabled = false;
+        spinner.classList.add('d-none');
+        buttonText.textContent = originalButtonText;
+    }
+});
 
     downloadUsersBtn.addEventListener('click', () => {
         const downloadUrl = `${API_BASE}/api/admin/users/download`;
