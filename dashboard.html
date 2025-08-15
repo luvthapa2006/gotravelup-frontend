@@ -316,6 +316,12 @@
                                 Insufficient wallet balance. Please add money to your wallet first.
                             </div>
                         </div>
+
+<div class="trip-plan-details mt-4">
+    <h6>Trip Itinerary</h6>
+    <div id="bookingTripPlan" class="text-muted small p-2 bg-light rounded" style="max-height: 150px; overflow-y: auto;">
+        </div>
+</div>
                     </div>
                     <div class="booking-options">
                         <p class="mb-3">Choose an option:</p>
@@ -832,6 +838,13 @@ function bookTrip(buttonElement) {
             document.getElementById('bookingTripDate').textContent = trip.date;
             document.getElementById('bookingTripPrice').textContent = `₹${trip.salePrice}`;
             document.getElementById('modalWalletBalance').textContent = currentUser.wallet || 0;
+                const tripPlanContainer = document.getElementById('bookingTripPlan');
+    if (trip.tripPlan) {
+        // Replace newline characters with <br> tags for proper display in HTML
+        tripPlanContainer.innerHTML = trip.tripPlan.replace(/\n/g, '<br>');
+    } else {
+        tripPlanContainer.innerHTML = '<em>No detailed plan available for this trip.</em>';
+    }
             
             // Check if user has sufficient funds
             const insufficientFunds = document.getElementById('insufficientFunds');

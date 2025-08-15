@@ -98,17 +98,17 @@ document.addEventListener('DOMContentLoaded', () => {
             tripsContainer.innerHTML = '';
             trips.forEach(trip => {
                 const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td><img src="${trip.image}" alt="${trip.destination}" width="100" class="img-thumbnail"></td>
-                    <td>${trip.destination}</td>
-                    <td>${new Date(trip.date).toLocaleDateString()}</td>
-                    <td>₹${trip.salePrice}</td>
-                    <td>${trip.currentBookings} / ${trip.maxParticipants}</td>
-                    <td>
-                        <button class="btn btn-sm btn-info view-bookings-btn" data-id="${trip._id}" data-name="${trip.destination}">View Bookings</button>
-                        <button class="btn btn-sm btn-danger delete-trip-btn" data-id="${trip._id}">Delete</button>
-                    </td>
-                `;
+tr.innerHTML = `
+    <td><img src="${trip.image}" alt="${trip.destination}" width="100" class="img-thumbnail"></td>
+    <td>${trip.destination}</td>
+    <td>${new Date(trip.date).toLocaleDateString()}</td>
+    <td>₹${trip.salePrice}</td>
+    <td>${trip.currentBookings} / ${trip.maxParticipants}</td>
+    <td>
+        <button class="btn btn-sm btn-info view-bookings-btn" data-id="${trip._id}" data-name="${trip.destination}">View Bookings</button>
+        <button class="btn btn-sm btn-warning edit-trip-btn" data-id="${trip._id}">Edit</button> <button class="btn btn-sm btn-danger delete-trip-btn" data-id="${trip._id}">Delete</button>
+    </td>
+`;
                 tripsContainer.appendChild(tr);
             });
         } catch (error) {
@@ -132,7 +132,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <td>${user.username}</td>
                         <td>${user.email}</td>
                         <td>${user.sapId}</td>
-                        <td>₹${user.wallet}</td>
+                        <td>${user.gender || 'N/A'}</td><td>₹${user.wallet}</td>
                         <td>
                             <button class="btn btn-sm btn-danger delete-user-btn" data-id="${user._id}">Delete</button>
                         </td>
@@ -217,7 +217,33 @@ document.addEventListener('DOMContentLoaded', () => {
             refundsContainer.innerHTML = '<tr><td colspan="5" class="text-danger">Failed to load refunds.</td></tr>';
         }
     }
+// Inside the DOMContentLoaded listener in admin.js
+const editTripForm = document.getElementById('editTripForm');
+editTripForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const tripId = document.getElementById('editTripId').value;
+    const formData = new FormData(editTripForm);
+    const data = Object.fromEntries(formData.entries());
+    data.password = adminPassword; // Add admin password for auth
 
+    try {
+        const response = await fetch(`${API_BASE}/api/admin/trips/${tripId}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        });
+        const result = await response.json();
+        if (result.success) {
+            alert('Trip updated successfully!');
+            bootstrap.Modal.getInstance(document.getElementById('editTripModal')).hide();
+            loadTrips(); // Refresh the trips list
+        } else {
+            alert(`Error: ${result.message}`);
+        }
+    } catch (error) {
+        alert('An error occurred. Please try again.');
+    }
+});
     // --- EVENT HANDLERS ---
     addTripForm.addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -267,6 +293,38 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Event delegation for all dynamically created buttons
     document.body.addEventListener('click', async (e) => {
+        // Inside the click event listener in admin.js
+
+// Edit Trip Button Click
+if (e.target.classList.contains('edit-trip-btn')) {
+    const tripId = e.target.dataset.id;
+    try {
+        // Find the trip data from the already loaded trips to populate the form
+        const response = await fetch(`${API_BASE}/api/trips`);
+        const trips = await response.json();
+        const tripToEdit = trips.find(t => t._id === tripId);
+
+        if (tripToEdit) {
+            // Populate the modal form
+            document.getElementById('editTripId').value = tripToEdit._id;
+            document.getElementById('editDestination').value = tripToEdit.destination;
+            document.getElementById('editCategory').value = tripToEdit.category;
+            document.getElementById('editOriginalPrice').value = tripToEdit.originalPrice;
+            document.getElementById('editSalePrice').value = tripToEdit.salePrice;
+            document.getElementById('editMaxParticipants').value = tripToEdit.maxParticipants;
+            // Format date correctly for date input field (YYYY-MM-DD)
+            document.getElementById('editDate').value = new Date(tripToEdit.date).toISOString().split('T')[0];
+            document.getElementById('editDescription').value = tripToEdit.description;
+            document.getElementById('editTripPlan').value = tripToEdit.tripPlan || '';
+
+            // Show the modal
+            const modal = new bootstrap.Modal(document.getElementById('editTripModal'));
+            modal.show();
+        }
+    } catch (error) {
+        alert('Could not fetch trip details.');
+    }
+}
         if (e.target.classList.contains('deny-refund-btn')) {
     const refundId = e.target.dataset.id;
     if(!confirm('Are you sure you want to deny this refund? The user booking will be reactivated.')) return;
