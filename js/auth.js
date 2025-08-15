@@ -1,8 +1,7 @@
 // =============================
-// GoTravelUp Authentication Manager
+// UNISCAPE Authentication Manager
 // =============================
 
-// Change this if backend URL changes
 const API_BASE = 'https://gotravelup-backend.onrender.com';
 
 class AuthManager {
@@ -11,44 +10,46 @@ class AuthManager {
     }
 
     init() {
-
-        // Signup form
+        // Find and attach to signup form if it exists
         const signupForm = document.getElementById('signupForm');
         if (signupForm) {
             signupForm.addEventListener('submit', (e) => this.handleSignup(e));
         }
 
-        // Login form
+        // Find and attach to login form if it exists
         const loginForm = document.getElementById('loginForm');
         if (loginForm) {
             loginForm.addEventListener('submit', (e) => this.handleLogin(e));
         }
-
-        // Referral code input (if exists)
-        const referralInput = document.getElementById('referralCode');
-        if (referralInput) {
-            referralInput.addEventListener('blur', () => this.validateReferralCode(referralInput.value));
-        }
     }
 
-    // =============================
-    // Signup Handler
-    // =============================
+    // --- Signup Handler ---
     async handleSignup(e) {
         e.preventDefault();
-
         const form = e.target;
-        const formData = new FormData(form);
-        const data = Object.fromEntries(formData.entries());
+        const button = form.querySelector('button[type="submit"]');
+        const spinner = button.querySelector('.spinner-border');
+        const buttonText = button.querySelector('.button-text');
 
-        // ✅ Terms & Conditions check
-        const termsCheckbox = document.getElementById('terms');
-        if (!termsCheckbox || !termsCheckbox.checked) {
-            alert('You must agree to the Terms & Conditions before signing up.');
-            return;
-        }
+        if (!button || !spinner || !buttonText) return; // Safety check
+
+        const originalButtonText = buttonText.textContent;
+
+        // Show loading state
+        button.disabled = true;
+        spinner.classList.remove('d-none');
+        buttonText.textContent = 'Creating Account...';
 
         try {
+            const termsCheckbox = document.getElementById('terms');
+            if (!termsCheckbox || !termsCheckbox.checked) {
+                alert('You must agree to the Terms & Conditions before signing up.');
+                throw new Error("Terms not accepted"); // Stop execution
+            }
+
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData.entries());
+
             const res = await fetch(`${API_BASE}/api/register`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -58,30 +59,49 @@ class AuthManager {
 
             const result = await res.json();
 
-            if (!res.ok) {
-                alert(result.message || 'Registration failed');
-                return;
+            if (res.ok) {
+                alert('Registration successful! You can now log in.');
+                window.location.href = 'signin.html'; // Go to signin page
+            } else {
+                alert(result.message || 'Registration failed.');
+                // Reset button on failure
+                button.disabled = false;
+                spinner.classList.add('d-none');
+                buttonText.textContent = originalButtonText;
             }
-
-            alert('Registration successful! You can now log in.');
-            window.location.href = 'index.html'; // redirect to login page
         } catch (err) {
-            console.error('Registration error:', err);
-            alert('Error connecting to server. Please try again.');
+            if (err.message !== "Terms not accepted") {
+               console.error('Registration error:', err);
+               alert('An error occurred. Please try again.');
+            }
+            // Reset button on any error
+            button.disabled = false;
+            spinner.classList.add('d-none');
+            buttonText.textContent = originalButtonText;
         }
     }
 
-    // =============================
-    // Login Handler
-    // =============================
+    // --- Login Handler ---
     async handleLogin(e) {
         e.preventDefault();
-
         const form = e.target;
-        const formData = new FormData(form);
-        const data = Object.fromEntries(formData.entries());
+        const button = form.querySelector('button[type="submit"]');
+        const spinner = button.querySelector('.spinner-border');
+        const buttonText = button.querySelector('.button-text');
+
+        if (!button || !spinner || !buttonText) return; // Safety check
+
+        const originalButtonText = buttonText.textContent;
+
+        // Show loading state
+        button.disabled = true;
+        spinner.classList.remove('d-none');
+        buttonText.textContent = 'Logging In...';
 
         try {
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData.entries());
+
             const res = await fetch(`${API_BASE}/api/login`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -91,74 +111,25 @@ class AuthManager {
 
             const result = await res.json();
 
-            if (!res.ok) {
-                alert(result.message || 'Login failed');
-                return;
+            if (res.ok) {
+                window.location.href = 'dashboard.html'; // Go to dashboard
+            } else {
+                alert(result.message || 'Login failed.');
+                // Reset button on failure
+                button.disabled = false;
+                spinner.classList.add('d-none');
+                buttonText.textContent = originalButtonText;
             }
-
-            window.location.href = 'dashboard.html';
         } catch (err) {
             console.error('Login error:', err);
-            alert('Error connecting to server. Please try again.');
-        }
-    }
-
-    // =============================
-    // Check Auth Status (Dashboard)
-    // =============================
-    async checkAuthStatus() {
-        try {
-            const res = await fetch(`${API_BASE}/api/profile`, {
-                method: 'GET',
-                credentials: 'include'
-            });
-
-            if (res.ok) {
-                const user = await res.json();
-                this.populateDashboard(user);
-            } else {
-                window.location.href = 'index.html';
-            }
-        } catch (err) {
-            console.error('Auth check error:', err);
-            window.location.href = 'index.html';
-        }
-    }
-
-    // =============================
-    // Populate Dashboard
-    // =============================
-    populateDashboard(user) {
-        document.getElementById('username').textContent = user.username || '';
-        document.getElementById('walletAmount').textContent = user.wallet || 0;
-    }
-
-    // =============================
-    // Validate Referral Code
-    // =============================
-    async validateReferralCode(code) {
-        if (!code) return;
-
-        try {
-            const res = await fetch(`${API_BASE}/api/validate-referral`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                credentials: 'include',
-                body: JSON.stringify({ referralCode: code })
-            });
-
-            const result = await res.json();
-
-            if (!res.ok) {
-                alert(result.message || 'Invalid referral code');
-            }
-        } catch (err) {
-            console.error('Referral validation error:', err);
+            alert('An error occurred. Please try again.');
+            // Reset button on error
+            button.disabled = false;
+            spinner.classList.add('d-none');
+            buttonText.textContent = originalButtonText;
         }
     }
 }
 
-// =============================
-// Initialize AuthManager
-// =============================
+// Initialize the AuthManager when the DOM is loaded
 document.addEventListener('DOMContentLoaded', () => new AuthManager());
