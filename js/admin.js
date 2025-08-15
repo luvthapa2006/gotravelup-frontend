@@ -1,4 +1,54 @@
 document.addEventListener('DOMContentLoaded', () => {
+// In admin.js, inside the DOMContentLoaded event listener
+
+// --- Site Settings Logic ---
+const backgroundForm = document.getElementById('backgroundForm');
+const backgroundPreview = document.getElementById('backgroundPreview');
+
+// Function to load and display the current background
+async function loadCurrentBackground() {
+    try {
+        const response = await fetch(`${API_BASE}/api/settings/background`);
+        const settings = await response.json();
+        
+        if (settings.backgroundType === 'video') {
+            backgroundPreview.innerHTML = `<video src="${settings.backgroundUrl}" muted playsinline loop autoplay style="width: 100%;"></video>`;
+        } else {
+            backgroundPreview.innerHTML = `<img src="${settings.backgroundUrl}" style="width: 100%;">`;
+        }
+    } catch (error) {
+        backgroundPreview.innerHTML = '<p class="text-danger">Could not load preview.</p>';
+    }
+}
+
+// Add event listener for the form submission
+if (backgroundForm) {
+    backgroundForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const formData = new FormData(backgroundForm);
+        formData.append('password', adminPassword); // Add admin password for auth
+
+        try {
+            const response = await fetch(`${API_BASE}/api/admin/settings/background`, {
+                method: 'POST',
+                body: formData
+            });
+            const result = await response.json();
+
+            if (result.success) {
+                alert('Background updated successfully!');
+                loadCurrentBackground(); // Refresh the preview
+            } else {
+                alert(`Error: ${result.message}`);
+            }
+        } catch (error) {
+            alert('An error occurred. Please try again.');
+        }
+    });
+
+    // Also load the preview when the page loads
+    loadCurrentBackground();
+}
     const API_BASE = "https://gotravelup-backend.onrender.com";
     let adminPassword = '';
 
