@@ -104,18 +104,6 @@
                 <h2 class="display-6 fw-bold text-primary">Upcoming Weekend Trips</h2>
                 </div>
 
-            <div class="alert alert-warning d-flex align-items-center border-warning" role="alert" style="background-color: #fff3cd; color: #664d03;">
-                <i class="fas fa-exclamation-triangle fa-2x me-3"></i>
-                <div>
-                    <h5 class="alert-heading">Important Cancellation Policy</h5>
-                    <ul class="mb-0">
-                        <li><strong>100% Refund:</strong> For cancellations made 48 hours or more before the trip date.</li>
-                        <li><strong>50% Refund:</strong> For cancellations made between 24 and 48 hours before the trip date.</li>
-                        <li><strong>No Refund:</strong> For cancellations made less than 24 hours before the trip date.</li>
-                    </ul>
-                </div>
-            </div>
-
         </div>
     </div>
 
@@ -237,6 +225,14 @@
             </div>
             <div class="modal-body">
                 <h6>Trip to <span id="paymentTripName"></span></h6>
+                    <div class="alert alert-sm alert-warning mt-3">
+        <h6 class="alert-heading small">Cancellation Policy</h6>
+        <ul class="mb-0 small">
+            <li><b>100% Refund:</b> 48+ hours before trip</li>
+            <li><b>50% Refund:</b> 24-48 hours before trip</li>
+            <li><b>No Refund:</b> Less than 24 hours before trip</li>
+        </ul>
+    </div>
                 <table class="table table-sm">
                     <thead>
                         <tr>
@@ -497,20 +493,20 @@ function showPaymentDetailsModal(trip) {
     document.getElementById('paymentTripName').textContent = trip.destination;
     tbody.innerHTML = ''; // Clear previous details
 
-    let total = 0;
+    // Display the itemized list from the admin panel
     if (trip.paymentDetails && trip.paymentDetails.length > 0) {
         trip.paymentDetails.forEach(item => {
             const row = tbody.insertRow();
             row.innerHTML = `<td>${item.description}</td><td class="text-end">₹${item.price}</td>`;
-            total += item.price;
         });
+    } else {
+        // If no details are provided, show a single line for the total trip cost
+        const row = tbody.insertRow();
+        row.innerHTML = `<td>Total Trip Cost</td><td class="text-end">₹${trip.salePrice}</td>`;
     }
-    // Add the base trip price
-    const baseRow = tbody.insertRow();
-    baseRow.innerHTML = `<td>Base Trip Fare</td><td class="text-end">₹${trip.salePrice}</td>`;
-    total += trip.salePrice;
 
-    totalEl.textContent = `₹${total.toFixed(2)}`;
+    // The total displayed is always the final salePrice
+    totalEl.textContent = `₹${trip.salePrice.toFixed(2)}`;
 
     // Show the modal
     const paymentModal = new bootstrap.Modal(document.getElementById('paymentDetailsModal'));
