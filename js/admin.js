@@ -177,6 +177,7 @@ if (backgroundForm) {
         loadUsers();
         loadPendingTransactions();
         loadRefundRequests();
+        loadCurrentBackground();
     }
 
      async function refreshAllData() {
