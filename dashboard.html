@@ -72,8 +72,25 @@
     <div class="container py-4">
 <div class="row mb-4">
     <div class="col-12">
-        <div class="profile-card">
+<div class="profile-card">
+    <div class="row align-items-center">
+        <div class="col-auto">
+            <div class="profile-avatar">
+                <img id="profileAvatar" src="assets/male-avatar.svg" alt="User Avatar" width="80" height="80">
             </div>
+        </div>
+        <div class="col">
+            <h4 id="userName">Loading...</h4>
+            <p class="text-muted mb-1">SAP ID: <span id="userSapId">...</span></p>
+            <p class="text-muted mb-1">Email: <span id="userEmail">...</span></p>
+            <p class="text-muted mb-0">Phone: <span id="userPhone">...</span></p>
+        </div>
+        <div class="col-md-auto text-md-end mt-3 mt-md-0">
+            <div class="referral-code">
+                <small>Your Referral Code</small>
+                <h5 class="mb-0" id="referralCode">...</h5>
+            </div>
+        </div>
     </div>
 </div>
 
