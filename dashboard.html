@@ -131,8 +131,6 @@
     </div>
 </div>
 
-    <div class="row mt-5"> ... </div>
-
 
 
     <!-- Wallet Modal -->
@@ -390,6 +388,57 @@
         </div>
     </div>
 
+<div class="modal fade" id="transportBookingModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Book Your Travel</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <h6 id="transportBookingName">Route Name</h6>
+                <p class="text-muted" id="transportBookingTime">Departure Time</p>
+                <div class="pricing-info mb-3">
+                    <span class="h4 text-success" id="transportBookingPrice">₹0</span>
+                </div>
+                <div class="wallet-info mb-3">
+                    <p class="mb-1">Your Wallet Balance: <strong>₹<span id="transportModalWalletBalance">0</span></strong></p>
+                    <div id="transportInsufficientFunds" class="alert alert-warning d-none">
+                        <i class="fas fa-exclamation-triangle me-2"></i> Insufficient funds. Please add money first.
+                    </div>
+                </div>
+                <div class="d-grid gap-2">
+                    <button type="button" class="btn btn-outline-primary" id="talkToDealerBtn"><i class="fas fa-comments me-2"></i> Talk to Dealer</button>
+                    <button type="button" class="btn btn-primary" id="continueTransportPaymentBtn"><i class="fas fa-credit-card me-2"></i> Continue with Payment</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="transportPaymentDetailsModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Payment Breakdown</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-sm">
+                    <thead><tr><th>Description</th><th class="text-end">Price</th></tr></thead>
+                    <tbody id="transportPaymentDetailsTbody"></tbody>
+                    <tfoot><tr class="fw-bold fs-5"><td>Total</td><td class="text-end" id="transportPaymentDetailsTotal">₹0</td></tr></tfoot>
+                </table>
+                <div class="d-grid mt-4">
+                    <button class="btn btn-primary" id="confirmAndBookTransportBtn">
+                        <i class="fas fa-check-circle me-2"></i>Confirm & Book Seat
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
     <!-- Host Contact Modal -->
     <div class="modal fade" id="hostContactModal" tabindex="-1" aria-labelledby="hostContactModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -496,6 +545,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="js/auth.js"></script>
     <script>
+    let currentTransportToBook = null;
 
 async function loadTransportOptions() {
     const container = document.getElementById('transportContainer');
@@ -510,17 +560,17 @@ async function loadTransportOptions() {
         routes.forEach(route => {
             const card = document.createElement('div');
             card.className = 'col-md-6 col-lg-4';
-            card.innerHTML = `
-                <div class="trip-card">
-                    <div class="trip-content">
-                        <h5 class="trip-title">${route.routeName}</h5>
-                        <p class="mb-2"><span class="badge bg-info">${route.type}</span></p>
-                        <p><strong>Departure:</strong> ${route.departureTime}</p>
-                        <div class="trip-pricing"><span class="sale-price">₹${route.price}</span></div>
-                        <button class="btn btn-primary w-100 mt-3">Book Seat</button>
-                    </div>
-                </div>
-            `;
+card.innerHTML = `
+    <div class="trip-card">
+        <div class="trip-content">
+            <h5 class="trip-title">${route.routeName}</h5>
+            <p class="mb-2"><span class="badge bg-info">${route.type}</span></p>
+            <p><strong>Departure:</strong> ${route.departureTime}</p>
+            <div class="trip-pricing"><span class="sale-price">₹${route.price}</span></div>
+            <button class="btn btn-primary w-100 mt-3" data-transport='${JSON.stringify(route)}' onclick="bookTransport(this)">Book Seat</button>
+        </div>
+    </div>
+`;
             container.appendChild(card);
         });
     } catch (error) {
@@ -528,6 +578,73 @@ async function loadTransportOptions() {
     }
 }
 
+function bookTransport(buttonElement) {
+    const transportData = JSON.parse(buttonElement.getAttribute('data-transport'));
+    if (transportData) {
+        currentTransportToBook = transportData;
+        showTransportBookingModal(transportData);
+    }
+}
+
+function showTransportBookingModal(transport) {
+    document.getElementById('transportBookingName').textContent = transport.routeName;
+    document.getElementById('transportBookingTime').textContent = `Departure: ${transport.departureTime}`;
+    document.getElementById('transportBookingPrice').textContent = `₹${transport.price}`;
+    document.getElementById('transportModalWalletBalance').textContent = currentUser.wallet || 0;
+
+    const insufficientFunds = document.getElementById('transportInsufficientFunds');
+    const continueBtn = document.getElementById('continueTransportPaymentBtn');
+    
+    if (currentUser.wallet < transport.price) {
+        insufficientFunds.classList.remove('d-none');
+        continueBtn.disabled = true;
+    } else {
+        insufficientFunds.classList.add('d-none');
+        continueBtn.disabled = false;
+    }
+
+    const modal = new bootstrap.Modal(document.getElementById('transportBookingModal'));
+    modal.show();
+}
+
+function showTransportPaymentDetailsModal(transport) {
+    document.getElementById('transportPaymentDetailsTbody').innerHTML = `<tr><td>Route Fare</td><td class="text-end">₹${transport.price}</td></tr>`;
+    document.getElementById('transportPaymentDetailsTotal').textContent = `₹${transport.price.toFixed(2)}`;
+    
+    const modal = new bootstrap.Modal(document.getElementById('transportPaymentDetailsModal'));
+    modal.show();
+}
+
+async function handleTransportPayment() {
+    if (!currentTransportToBook) return;
+    
+    const button = document.getElementById('confirmAndBookTransportBtn');
+    button.disabled = true;
+    button.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Processing...';
+
+    try {
+        const response = await fetch(`${API_BASE}/api/book-transport`, {
+            method: 'POST',
+            credentials: 'include',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ transportId: currentTransportToBook._id })
+        });
+        const data = await response.json();
+        if (response.ok) {
+            showAlert('success', data.message);
+            loadUserProfile(); // To update wallet balance
+            // You can add a "My Shuttle Bookings" section and refresh it here
+        } else {
+            showAlert('error', data.message);
+        }
+    } catch (error) {
+        showAlert('error', 'A network error occurred.');
+    } finally {
+        bootstrap.Modal.getInstance(document.getElementById('transportPaymentDetailsModal')).hide();
+        button.disabled = false;
+        button.innerHTML = '<i class="fas fa-check-circle me-2"></i>Confirm & Book Seat';
+    }
+}
     
 function showPaymentDetailsModal(trip) {
     const tbody = document.getElementById('paymentDetailsTbody');
@@ -974,6 +1091,13 @@ function bookTrip(buttonElement) {
         }
 
         function setupEventListeners() {
+            document.getElementById('continueTransportPaymentBtn').addEventListener('click', () => {
+    if (currentTransportToBook) {
+        bootstrap.Modal.getInstance(document.getElementById('transportBookingModal')).hide();
+        showTransportPaymentDetailsModal(currentTransportToBook);
+    }
+});
+document.getElementById('confirmAndBookTransportBtn').addEventListener('click', handleTransportPayment);
             // Wallet form
             document.getElementById('walletForm').addEventListener('submit', handleWalletAdd);
                 // View transaction history
