@@ -51,11 +51,7 @@ addTransportForm.addEventListener('submit', async (e) => {
         alert('An error occurred.');
     } 
 }); 
-if (e.target.classList.contains('delete-transport-btn')) {
-    const routeId = e.target.dataset.id;
-    if(!confirm('Are you sure you want to delete this route?')) return;
-    // ... logic to call DELETE /api/admin/transport/:id ...
-}   
+ 
 const paymentDetailsContainer = document.getElementById('paymentDetailsContainer');
 const addDetailBtn = document.getElementById('addDetailBtn');
 const paymentTotalEl = document.getElementById('paymentTotal');
@@ -491,11 +487,7 @@ if (!statusCheckbox.checked) {
         refreshAllBtn.addEventListener('click', refreshAllData);
     }
 
-    
-    // Event delegation for all dynamically created buttons
-    document.body.addEventListener('click', async (e) => {
-        // Inside the click event listener in admin.js
-// Handle Trip Status Toggle
+    // Handle Trip Status Toggle
 document.body.addEventListener('change', async (e) => {
     if (e.target.classList.contains('trip-status-toggle')) {
         const tripId = e.target.dataset.id;
@@ -521,6 +513,9 @@ document.body.addEventListener('change', async (e) => {
         }
     }
 });
+    // Event delegation for all dynamically created buttons
+    document.body.addEventListener('click', async (e) => {
+        // Inside the click event listener in admin.js
 // Edit Trip Button Click
 if (e.target.classList.contains('edit-trip-btn')) {
     const tripId = e.target.dataset.id;
@@ -670,6 +665,27 @@ if (e.target.classList.contains('edit-trip-btn')) {
                 alert('An error occurred.');
             }
         }
+            if (e.target.classList.contains('delete-transport-btn')) {
+        const routeId = e.target.dataset.id;
+        if (!confirm('Are you sure you want to delete this transport route?')) return;
+
+        try {
+            const response = await fetch(`${API_BASE}/api/admin/transport/${routeId}`, {
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(getAuthBody())
+            });
+            const result = await response.json();
+            if (result.success) {
+                alert('Transport route deleted!');
+                loadTransportRoutes(); // Refresh the list
+            } else {
+                alert(`Error: ${result.message}`);
+            }
+        } catch (error) {
+            alert('An error occurred.');
+        }
+    }
         
         // View Bookings
         if (e.target.classList.contains('view-bookings-btn')) {

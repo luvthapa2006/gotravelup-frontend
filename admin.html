@@ -45,35 +45,13 @@
             <li class="nav-item" role="presentation">
                 <button class="nav-link" id="pills-settings-tab" data-bs-toggle="pill" data-bs-target="#pills-settings" type="button" role="tab">Site Settings</button>
             </li>
-                <li class="nav-item" role="presentation">
-        <button class="nav-link" id="pills-travel-tab" data-bs-toggle="pill" data-bs-target="#pills-travel" type="button" role="tab">Travel Management</button>
-    </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="pills-travel-tab" data-bs-toggle="pill" data-bs-target="#pills-travel" type="button" role="tab">Travel Management</button>
+            </li>
         </ul>
-<div class="tab-pane fade" id="pills-travel" role="tabpanel">
-    <h4>Add New Travel Route</h4>
-    <div class="card card-body mb-4">
-        <form id="addTransportForm">
-            <div class="row g-3">
-                <div class="col-md-6"><input type="text" class="form-control" name="routeName" placeholder="Route Name (e.g., UPES to ISBT)" required></div>
-                <div class="col-md-6"><select class="form-select" name="type" required><option value="Shuttle">Shuttle</option><option value="Carpool">Carpool</option></select></div>
-                <div class="col-md-4"><input type="text" class="form-control" name="departureTime" placeholder="Departure Time (e.g., 10:00 AM)" required></div>
-                <div class="col-md-4"><input type="number" class="form-control" name="price" placeholder="Price" required></div>
-                <div class="col-md-4"><input type="number" class="form-control" name="capacity" placeholder="Capacity" required></div>
-                <div class="col-12"><div class="form-check form-switch"><input class="form-check-input" type="checkbox" name="status" value="active" checked><label class="form-check-label">Status: Active</label></div></div>
-                <div class="col-12 d-grid"><button type="submit" class="btn btn-primary">Add Route</button></div>
-            </div>
-        </form>
-    </div>
-    <h4>Existing Travel Routes</h4>
-    <div class="table-responsive">
-        <table class="table table-striped">
-            <thead><tr><th>Route Name</th><th>Type</th><th>Time</th><th>Price</th><th>Status</th><th>Actions</th></tr></thead>
-            <tbody id="transportRoutesContainer"></tbody>
-        </table>
-    </div>
-</div>
+
         <div class="tab-content" id="pills-tabContent">
-            
+
             <div class="tab-pane fade show active" id="pills-trips" role="tabpanel">
                 <h4>Add New Trip</h4>
                 <div class="card card-body mb-4">
@@ -81,11 +59,11 @@
                         <div class="row g-3">
                             <div class="col-md-6"><input type="text" class="form-control" name="destination" placeholder="Destination" required></div>
                             <div class="col-md-6">
-                               <select class="form-select" name="category" required>
-                                  <option value="" disabled selected>Select Category</option>
-                                  <option value="Adventure">Adventure Type</option>
-                                  <option value="Spiritual">Spiritual Type</option>
-                               </select>
+                                <select class="form-select" name="category" required>
+                                    <option value="" disabled selected>Select Category</option>
+                                    <option value="Adventure">Adventure Type</option>
+                                    <option value="Spiritual">Spiritual Type</option>
+                                </select>
                             </div>
                             <div class="col-md-4"><input type="number" class="form-control" name="originalPrice" placeholder="Original Price" required></div>
                             <div class="col-md-4"><input type="number" class="form-control" name="salePrice" placeholder="Sale Price" required></div>
@@ -94,23 +72,20 @@
                             <div class="col-md-6"><input type="file" class="form-control" name="image" accept="image/*" required></div>
                             <div class="col-12"><textarea class="form-control" name="tripPlan" placeholder="Enter detailed trip plan..." rows="4"></textarea></div>
                             <div class="col-12"><textarea class="form-control" name="description" placeholder="Description" required></textarea></div>
-                                <div class="col-12">
-        <hr>
-        <h5>Payment Breakdown</h5>
-        <div id="paymentDetailsContainer">
-            </div>
-        <button type="button" id="addDetailBtn" class="btn btn-sm btn-outline-secondary mt-2">
-            <i class="fas fa-plus me-1"></i> Add Item
-        </button>
-        <div class="text-end fw-bold fs-5 mt-2" id="paymentTotal">Total: ₹0</div>
-        <hr>
-    </div>
-      <div class="col-12">
-        <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" role="switch" id="addTripStatus" name="status" value="active" checked>
-            <label class="form-check-label" for="addTripStatus">Trip Status: <span class="badge bg-success">Active</span></label>
-        </div>
-    </div>
+                            <div class="col-12">
+                                <hr>
+                                <h5>Payment Breakdown</h5>
+                                <div id="paymentDetailsContainer"></div>
+                                <button type="button" id="addDetailBtn" class="btn btn-sm btn-outline-secondary mt-2"><i class="fas fa-plus me-1"></i> Add Item</button>
+                                <div class="text-end fw-bold fs-5 mt-2" id="paymentTotal">Total: ₹0</div>
+                                <hr>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" role="switch" id="addTripStatus" name="status" value="active" checked>
+                                    <label class="form-check-label" for="addTripStatus">Trip Status: <span class="badge bg-success">Active</span></label>
+                                </div>
+                            </div>
                             <div class="col-12 d-grid">
                                 <button type="submit" class="btn btn-primary">
                                     <span class="spinner-border spinner-border-sm me-2 d-none" role="status" aria-hidden="true"></span>
@@ -172,14 +147,8 @@
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Background Type</label>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="backgroundType" id="typeImage" value="image" checked>
-                                <label class="form-check-label" for="typeImage">Image</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="backgroundType" id="typeVideo" value="video">
-                                <label class="form-check-label" for="typeVideo">Video</label>
-                            </div>
+                            <div class="form-check"><input class="form-check-input" type="radio" name="backgroundType" id="typeImage" value="image" checked><label class="form-check-label" for="typeImage">Image</label></div>
+                            <div class="form-check"><input class="form-check-input" type="radio" name="backgroundType" id="typeVideo" value="video"><label class="form-check-label" for="typeVideo">Video</label></div>
                         </div>
                         <div class="mb-3">
                             <label for="backgroundFile" class="form-label">Upload New File</label>
@@ -190,6 +159,30 @@
                             <span class="button-text">Update Background</span>
                         </button>
                     </form>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="pills-travel" role="tabpanel">
+                <h4>Add New Travel Route</h4>
+                <div class="card card-body mb-4">
+                    <form id="addTransportForm">
+                        <div class="row g-3">
+                            <div class="col-md-6"><input type="text" class="form-control" name="routeName" placeholder="Route Name (e.g., UPES to ISBT)" required></div>
+                            <div class="col-md-6"><select class="form-select" name="type" required><option value="Shuttle">Shuttle</option><option value="Carpool">Carpool</option></select></div>
+                            <div class="col-md-4"><input type="text" class="form-control" name="departureTime" placeholder="Departure Time (e.g., 10:00 AM)" required></div>
+                            <div class="col-md-4"><input type="number" class="form-control" name="price" placeholder="Price" required></div>
+                            <div class="col-md-4"><input type="number" class="form-control" name="capacity" placeholder="Capacity" required></div>
+                            <div class="col-12"><div class="form-check form-switch"><input class="form-check-input" type="checkbox" name="status" value="active" checked><label class="form-check-label">Status: Active</label></div></div>
+                            <div class="col-12 d-grid"><button type="submit" class="btn btn-primary">Add Route</button></div>
+                        </div>
+                    </form>
+                </div>
+                <h4>Existing Travel Routes</h4>
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead><tr><th>Route Name</th><th>Type</th><th>Time</th><th>Price</th><th>Status</th><th>Actions</th></tr></thead>
+                        <tbody id="transportRoutesContainer"></tbody>
+                    </table>
                 </div>
             </div>
 
@@ -210,10 +203,7 @@
     <div class="modal fade" id="editTripModal" tabindex="-1">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Edit Trip</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
+                <div class="modal-header"><h5 class="modal-title">Edit Trip</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
                 <div class="modal-body">
                     <form id="editTripForm">
                         <input type="hidden" id="editTripId" name="tripId">
