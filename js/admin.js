@@ -265,14 +265,18 @@ if (backgroundForm) {
             tripsContainer.innerHTML = '';
             trips.forEach(trip => {
                 const tr = document.createElement('tr');
+// Inside the loadTrips function in admin.js
 tr.innerHTML = `
-    <td><img src="${trip.image}" ...></td>
+    <td><img src="${trip.image}" alt="${trip.destination}" width="100" class="img-thumbnail"></td>
     <td>${trip.destination}</td>
     <td><span class="badge bg-${trip.status === 'active' ? 'success' : 'warning'}">${trip.status.replace('_', ' ')}</span></td>
     <td>₹${trip.salePrice}</td>
     <td>${trip.currentBookings} / ${trip.maxParticipants}</td>
     <td>
-        <div class="form-check form-switch d-inline-block ms-2">
+        <button class="btn btn-sm btn-info view-bookings-btn" data-id="${trip._id}" data-name="${trip.destination}">View</button>
+        <button class="btn btn-sm btn-warning edit-trip-btn" data-id="${trip._id}">Edit</button>
+        <button class="btn btn-sm btn-danger delete-trip-btn" data-id="${trip._id}">Delete</button>
+        <div class="form-check form-switch d-inline-block ms-2 align-middle">
             <input class="form-check-input trip-status-toggle" type="checkbox" role="switch" data-id="${trip._id}" ${trip.status === 'active' ? 'checked' : ''}>
         </div>
     </td>
