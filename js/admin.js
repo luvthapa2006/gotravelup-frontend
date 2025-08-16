@@ -3,25 +3,37 @@ const transportRoutesContainer = document.getElementById('transportRoutesContain
 const addTransportForm = document.getElementById('addTransportForm');
 
 // Add this function to load routes
+// In js/admin.js
+
 async function loadTransportRoutes() {
     try {
-        const response = await fetch(`${API_BASE}/api/transport`); // Using public route is fine here
-        const routes = await response.json();
-        transportRoutesContainer.innerHTML = '';
-        routes.forEach(route => {
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td>${route.routeName}</td>
-                <td>${route.type}</td>
-                <td>${route.departureTime}</td>
-                <td>₹${route.price}</td>
-                <td><span class="badge bg-${route.status === 'active' ? 'success' : 'warning'}">${route.status}</span></td>
-                <td><button class="btn btn-sm btn-danger delete-transport-btn" data-id="${route._id}">Delete</button></td>
-            `;
-            transportRoutesContainer.appendChild(tr);
+        // ✅ Use the new admin-specific route and add auth headers
+        const response = await fetch(`${API_BASE}/api/admin/transport`, {
+            headers: getAuthHeaders(true)
         });
+        const data = await response.json();
+        
+        if (data.success) {
+            const routes = data.routes;
+            transportRoutesContainer.innerHTML = '';
+            routes.forEach(route => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${route.routeName}</td>
+                    <td>${route.type}</td>
+                    <td>${route.departureTime}</td>
+                    <td>₹${route.price}</td>
+                    <td><span class="badge bg-${route.status === 'active' ? 'success' : 'warning'}">${route.status.replace('_', ' ')}</span></td>
+                    <td><button class="btn btn-sm btn-danger delete-transport-btn" data-id="${route._id}">Delete</button></td>
+                `;
+                transportRoutesContainer.appendChild(tr);
+            });
+        } else {
+            throw new Error(data.message);
+        }
     } catch (error) {
         console.error('Error loading transport routes:', error);
+        transportRoutesContainer.innerHTML = '<tr><td colspan="6" class="text-danger">Failed to load transport routes.</td></tr>';
     }
 }
 
