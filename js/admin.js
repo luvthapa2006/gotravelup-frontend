@@ -1,6 +1,53 @@
 document.addEventListener('DOMContentLoaded', () => {
-// In admin.js, inside the DOMContentLoaded event listener
+const paymentDetailsContainer = document.getElementById('paymentDetailsContainer');
+const addDetailBtn = document.getElementById('addDetailBtn');
+const paymentTotalEl = document.getElementById('paymentTotal');
 
+// Function to add a new row of inputs for a payment item
+function addPaymentDetailRow() {
+    const row = document.createElement('div');
+    row.className = 'row g-2 mb-2 align-items-center payment-detail-row';
+    row.innerHTML = `
+        <div class="col">
+            <input type="text" class="form-control payment-description" placeholder="Item Description (e.g., Transport)">
+        </div>
+        <div class="col-md-3">
+            <input type="number" class="form-control payment-price" placeholder="Price" min="0">
+        </div>
+        <div class="col-auto">
+            <button type="button" class="btn btn-danger btn-sm remove-detail-btn">&times;</button>
+        </div>
+    `;
+    paymentDetailsContainer.appendChild(row);
+}
+
+// Function to update the total price automatically
+function updatePaymentTotal() {
+    let total = 0;
+    document.querySelectorAll('.payment-price').forEach(input => {
+        const price = parseFloat(input.value) || 0;
+        total += price;
+    });
+    paymentTotalEl.textContent = `Total: ₹${total}`;
+}
+
+// Event listeners for the dynamic form
+if (addDetailBtn) {
+    addDetailBtn.addEventListener('click', addPaymentDetailRow);
+
+    paymentDetailsContainer.addEventListener('click', (e) => {
+        if (e.target.classList.contains('remove-detail-btn')) {
+            e.target.closest('.payment-detail-row').remove();
+            updatePaymentTotal();
+        }
+    });
+
+    paymentDetailsContainer.addEventListener('input', (e) => {
+        if (e.target.classList.contains('payment-price')) {
+            updatePaymentTotal();
+        }
+    });
+}
 // --- Site Settings Logic ---
 const backgroundForm = document.getElementById('backgroundForm');
 const backgroundPreview = document.getElementById('backgroundPreview');
@@ -325,6 +372,15 @@ addTripForm.addEventListener('submit', async (e) => {
     try {
         const formData = new FormData(addTripForm);
         formData.append('password', adminPassword);
+                const detailsArray = [];
+        document.querySelectorAll('.payment-detail-row').forEach(row => {
+            const description = row.querySelector('.payment-description').value;
+            const price = row.querySelector('.payment-price').value;
+            if (description && price) {
+                detailsArray.push({ description, price: parseFloat(price) });
+            }
+        });
+        formData.append('paymentDetails', JSON.stringify(detailsArray));
 
         const response = await fetch(`${API_BASE}/api/admin/trips`, {
             method: 'POST',
