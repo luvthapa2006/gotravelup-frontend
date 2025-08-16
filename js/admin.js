@@ -5,9 +5,9 @@ const addTransportForm = document.getElementById('addTransportForm');
 // Add this function to load routes
 // In js/admin.js
 
+// In js/admin.js, replace the existing loadTransportRoutes function
 async function loadTransportRoutes() {
     try {
-        // ✅ Use the new admin-specific route and add auth headers
         const response = await fetch(`${API_BASE}/api/admin/transport`, {
             headers: getAuthHeaders(true)
         });
@@ -24,7 +24,13 @@ async function loadTransportRoutes() {
                     <td>${route.departureTime}</td>
                     <td>₹${route.price}</td>
                     <td><span class="badge bg-${route.status === 'active' ? 'success' : 'warning'}">${route.status.replace('_', ' ')}</span></td>
-                    <td><button class="btn btn-sm btn-danger delete-transport-btn" data-id="${route._id}">Delete</button></td>
+                    <td>
+                        <button class="btn btn-sm btn-warning edit-transport-btn" data-id="${route._id}">Edit</button>
+                        <button class="btn btn-sm btn-danger delete-transport-btn" data-id="${route._id}">Delete</button>
+                        <div class="form-check form-switch d-inline-block ms-2 align-middle">
+                            <input class="form-check-input transport-status-toggle" type="checkbox" role="switch" data-id="${route._id}" ${route.status === 'active' ? 'checked' : ''}>
+                        </div>
+                    </td>
                 `;
                 transportRoutesContainer.appendChild(tr);
             });
@@ -36,6 +42,31 @@ async function loadTransportRoutes() {
         transportRoutesContainer.innerHTML = '<tr><td colspan="6" class="text-danger">Failed to load transport routes.</td></tr>';
     }
 }
+document.getElementById('editTransportForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const transportId = document.getElementById('editTransportId').value;
+    const formData = new FormData(e.target);
+    const data = Object.fromEntries(formData.entries());
+    data.password = adminPassword;
+
+    try {
+        const response = await fetch(`${API_BASE}/api/admin/transport/${transportId}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        });
+        const result = await response.json();
+        if (result.success) {
+            alert('Route updated successfully!');
+            bootstrap.Modal.getInstance(document.getElementById('editTransportModal')).hide();
+            loadTransportRoutes();
+        } else {
+            alert(`Error: ${result.message}`);
+        }
+    } catch (error) {
+        alert('An error occurred.');
+    }
+});
 
 // Add this event listener for the new form
 addTransportForm.addEventListener('submit', async (e) => {
@@ -505,6 +536,28 @@ if (!statusCheckbox.checked) {
 
     // Handle Trip Status Toggle
 document.body.addEventListener('change', async (e) => {
+    if (e.target.classList.contains('transport-status-toggle')) {
+    const routeId = e.target.dataset.id;
+    const newStatus = e.target.checked ? 'active' : 'coming_soon';
+
+    try {
+        const response = await fetch(`${API_BASE}/api/admin/transport/${routeId}/status`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ status: newStatus, password: adminPassword })
+        });
+        const result = await response.json();
+        if (result.success) {
+            loadTransportRoutes(); // Refresh list to show updated status
+        } else {
+            alert(`Error: ${result.message}`);
+            e.target.checked = !e.target.checked;
+        }
+    } catch (error) {
+        alert('An error occurred.');
+        e.target.checked = !e.target.checked;
+    }
+}
     if (e.target.classList.contains('trip-status-toggle')) {
         const tripId = e.target.dataset.id;
         const newStatus = e.target.checked ? 'active' : 'coming_soon';
@@ -531,6 +584,29 @@ document.body.addEventListener('change', async (e) => {
 });
     // Event delegation for all dynamically created buttons
     document.body.addEventListener('click', async (e) => {
+        if (e.target.classList.contains('edit-transport-btn')) {
+    const routeId = e.target.dataset.id;
+    // We fetch ALL routes again to find the one to edit.
+    // A more advanced solution would be a dedicated GET /api/admin/transport/:id route.
+    const response = await fetch(`${API_BASE}/api/admin/transport`, { headers: getAuthHeaders(true) });
+    const data = await response.json();
+    if (data.success) {
+        const routeToEdit = data.routes.find(r => r._id === routeId);
+        if (routeToEdit) {
+            // Populate the modal
+            document.getElementById('editTransportId').value = routeToEdit._id;
+            document.getElementById('editRouteName').value = routeToEdit.routeName;
+            document.getElementById('editTransportType').value = routeToEdit.type;
+            document.getElementById('editDepartureTime').value = routeToEdit.departureTime;
+            document.getElementById('editTransportPrice').value = routeToEdit.price;
+            document.getElementById('editTransportCapacity').value = routeToEdit.capacity;
+            
+            // Show the modal
+            const modal = new bootstrap.Modal(document.getElementById('editTransportModal'));
+            modal.show();
+        }
+    }
+}
         // Inside the click event listener in admin.js
 // Edit Trip Button Click
 if (e.target.classList.contains('edit-trip-btn')) {
