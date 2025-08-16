@@ -124,6 +124,27 @@
         </div>
     </div>
 
+    <div class="row mt-5"> ... </div>
+
+    <div class="row mt-5">
+        <div class="col-12">
+            <h2 class="display-6 fw-bold text-primary mb-4">Student Shuttle & Carpool</h2>
+            <div class="card card-body shadow-sm">
+                <p class="lead">Student Shuttle & Carpool – Fast, Affordable, Direct.</p>
+                <p>Say goodbye to the stress of changing 3 vehicles or paying ₹1000+ for a solo cab. With our service, you get direct, pre-booked rides from your college gate straight to ISBT Dehradun, the Railway Station, or Jolly Grant Airport.</p>
+                <h6>🔥 Why Students Love It</h6>
+                <ul>
+                    <li><strong>Direct Rides:</strong> No switching vehicles, no bargaining, no delays.</li>
+                    <li><strong>Budget Friendly:</strong> Shared fares make rides up to 70% cheaper than a cab.</li>
+                    <li><strong>On-Time Guarantee:</strong> Instant cashback if we're delayed by more than 30 mins.</li>
+                    <li><strong>Safe & Verified:</strong> All drivers are verified and routes are tracked.</li>
+                </ul>
+            </div>
+            <div class="row g-4 mt-3" id="transportContainer">
+                </div>
+        </div>
+    </div>
+
     <!-- Wallet Modal -->
     <div class="modal fade" id="walletModal" tabindex="-1" aria-labelledby="walletModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -486,6 +507,37 @@
     <script src="js/auth.js"></script>
     <script>
 
+async function loadTransportOptions() {
+    const container = document.getElementById('transportContainer');
+    try {
+        const response = await fetch(`${API_BASE}/api/transport`);
+        const routes = await response.json();
+        container.innerHTML = '';
+        if (routes.length === 0) {
+             container.innerHTML = '<p class="text-muted">No transport options available right now.</p>';
+             return;
+        }
+        routes.forEach(route => {
+            const card = document.createElement('div');
+            card.className = 'col-md-6 col-lg-4';
+            card.innerHTML = `
+                <div class="trip-card">
+                    <div class="trip-content">
+                        <h5 class="trip-title">${route.routeName}</h5>
+                        <p class="mb-2"><span class="badge bg-info">${route.type}</span></p>
+                        <p><strong>Departure:</strong> ${route.departureTime}</p>
+                        <div class="trip-pricing"><span class="sale-price">₹${route.price}</span></div>
+                        <button class="btn btn-primary w-100 mt-3">Book Seat</button>
+                    </div>
+                </div>
+            `;
+            container.appendChild(card);
+        });
+    } catch (error) {
+        console.error('Error loading transport options:', error);
+    }
+}
+
     
 function showPaymentDetailsModal(trip) {
     const tbody = document.getElementById('paymentDetailsTbody');
@@ -623,6 +675,7 @@ function updateThemeModalSelection() {
             loadMyTrips();
             setupEventListeners();
             updateThemeModalSelection(); // Call the new function to set the theme selection
+            loadTransportOptions(); // Load transport options on page load
         });
 
 // In dashboard.html
@@ -756,7 +809,7 @@ function createTripCard(trip, isBooked) { // Note the new 'isBooked' parameter
             </div>
         </div>
         `;
-    } else if (daysUntilTrip > 7) {
+    } else if (trip.status === 'coming_soon') { // ✅ CHANGED LOGIC
         // --- RENDER "COMING SOON" CARD ---
         cardHTML = `
         <div class="trip-card">
@@ -772,8 +825,7 @@ function createTripCard(trip, isBooked) { // Note the new 'isBooked' parameter
                     <i class="fas fa-hourglass-start me-1"></i> Booking Opens Soon
                 </button>
             </div>
-        </div>
-        `;
+        </div>`;
     } else {
         // --- RENDER "BOOK NOW" CARD ---
         const discount = Math.round(((trip.originalPrice - trip.salePrice) / trip.originalPrice) * 100);

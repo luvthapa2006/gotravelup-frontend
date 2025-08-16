@@ -1,4 +1,61 @@
 document.addEventListener('DOMContentLoaded', () => {
+const transportRoutesContainer = document.getElementById('transportRoutesContainer');
+const addTransportForm = document.getElementById('addTransportForm');
+
+// Add this function to load routes
+async function loadTransportRoutes() {
+    try {
+        const response = await fetch(`${API_BASE}/api/transport`); // Using public route is fine here
+        const routes = await response.json();
+        transportRoutesContainer.innerHTML = '';
+        routes.forEach(route => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${route.routeName}</td>
+                <td>${route.type}</td>
+                <td>${route.departureTime}</td>
+                <td>₹${route.price}</td>
+                <td><span class="badge bg-${route.status === 'active' ? 'success' : 'warning'}">${route.status}</span></td>
+                <td><button class="btn btn-sm btn-danger delete-transport-btn" data-id="${route._id}">Delete</button></td>
+            `;
+            transportRoutesContainer.appendChild(tr);
+        });
+    } catch (error) {
+        console.error('Error loading transport routes:', error);
+    }
+}
+
+// Add this event listener for the new form
+addTransportForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const formData = new FormData(addTransportForm);
+    const data = Object.fromEntries(formData.entries());
+    data.status = data.status ? 'active' : 'coming_soon';
+    data.password = adminPassword;
+
+    try {
+        const response = await fetch(`${API_BASE}/api/admin/transport`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        });
+        const result = await response.json();
+        if (result.success) {
+            alert('Route added!');
+            addTransportForm.reset();
+            loadTransportRoutes();
+        } else {
+            alert(`Error: ${result.message}`);
+        }
+    } catch (error) {
+        alert('An error occurred.');
+    } 
+}); 
+if (e.target.classList.contains('delete-transport-btn')) {
+    const routeId = e.target.dataset.id;
+    if(!confirm('Are you sure you want to delete this route?')) return;
+    // ... logic to call DELETE /api/admin/transport/:id ...
+}   
 const paymentDetailsContainer = document.getElementById('paymentDetailsContainer');
 const addDetailBtn = document.getElementById('addDetailBtn');
 const paymentTotalEl = document.getElementById('paymentTotal');
@@ -178,6 +235,7 @@ if (backgroundForm) {
         loadPendingTransactions();
         loadRefundRequests();
         loadCurrentBackground();
+        loadTransportRoutes();
     }
 
      async function refreshAllData() {
@@ -212,14 +270,15 @@ if (backgroundForm) {
             trips.forEach(trip => {
                 const tr = document.createElement('tr');
 tr.innerHTML = `
-    <td><img src="${trip.image}" alt="${trip.destination}" width="100" class="img-thumbnail"></td>
+    <td><img src="${trip.image}" ...></td>
     <td>${trip.destination}</td>
-    <td>${new Date(trip.date).toLocaleDateString()}</td>
+    <td><span class="badge bg-${trip.status === 'active' ? 'success' : 'warning'}">${trip.status.replace('_', ' ')}</span></td>
     <td>₹${trip.salePrice}</td>
     <td>${trip.currentBookings} / ${trip.maxParticipants}</td>
     <td>
-        <button class="btn btn-sm btn-info view-bookings-btn" data-id="${trip._id}" data-name="${trip.destination}">View Bookings</button>
-        <button class="btn btn-sm btn-warning edit-trip-btn" data-id="${trip._id}">Edit</button> <button class="btn btn-sm btn-danger delete-trip-btn" data-id="${trip._id}">Delete</button>
+        <div class="form-check form-switch d-inline-block ms-2">
+            <input class="form-check-input trip-status-toggle" type="checkbox" role="switch" data-id="${trip._id}" ${trip.status === 'active' ? 'checked' : ''}>
+        </div>
     </td>
 `;
                 tripsContainer.appendChild(tr);
@@ -373,6 +432,10 @@ addTripForm.addEventListener('submit', async (e) => {
     try {
         const formData = new FormData(addTripForm);
         formData.append('password', adminPassword);
+        const statusCheckbox = document.getElementById('addTripStatus');
+if (!statusCheckbox.checked) {
+    formData.set('status', 'coming_soon');
+}
                 const detailsArray = [];
         document.querySelectorAll('.payment-detail-row').forEach(row => {
             const description = row.querySelector('.payment-description').value;
@@ -432,7 +495,32 @@ addTripForm.addEventListener('submit', async (e) => {
     // Event delegation for all dynamically created buttons
     document.body.addEventListener('click', async (e) => {
         // Inside the click event listener in admin.js
+// Handle Trip Status Toggle
+document.body.addEventListener('change', async (e) => {
+    if (e.target.classList.contains('trip-status-toggle')) {
+        const tripId = e.target.dataset.id;
+        const newStatus = e.target.checked ? 'active' : 'coming_soon';
 
+        try {
+            const response = await fetch(`${API_BASE}/api/admin/trips/${tripId}/status`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ status: newStatus, password: adminPassword })
+            });
+            const result = await response.json();
+            if (result.success) {
+                // Refresh just the trips list for a quick update
+                loadTrips();
+            } else {
+                alert(`Error: ${result.message}`);
+                e.target.checked = !e.target.checked; // Revert the switch on failure
+            }
+        } catch (error) {
+            alert('An error occurred. Please try again.');
+            e.target.checked = !e.target.checked;
+        }
+    }
+});
 // Edit Trip Button Click
 if (e.target.classList.contains('edit-trip-btn')) {
     const tripId = e.target.dataset.id;
