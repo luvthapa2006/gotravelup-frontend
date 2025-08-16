@@ -3,8 +3,8 @@
 [[headers]]
   for = "/*"
   [headers.values]
-    # ✅ UPDATED: Added 'unsafe-inline' to script-src and the pixabay URL to img-src
-    Content-Security-Policy = "default-src 'self' https://gotravelup-backend.onrender.com; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; font-src 'self' https://cdnjs.cloudflare.com; img-src 'self' data: https://res.cloudinary.com https://ia601701.us.archive.org https://cdn.pixabay.com;"
+    # ✅ UPDATED: Added the 'media-src' directive to allow videos from Cloudinary
+    Content-Security-Policy = "default-src 'self' https://gotravelup-backend.onrender.com; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; font-src 'self' https://cdnjs.cloudflare.com; img-src 'self' data: https://res.cloudinary.com https://ia601701.us.archive.org https://cdn.pixabay.com; media-src 'self' https://res.cloudinary.com;"
     X-Frame-Options = "DENY"
     X-XSS-Protection = "1; mode=block"
     X-Content-Type-Options = "nosniff"
