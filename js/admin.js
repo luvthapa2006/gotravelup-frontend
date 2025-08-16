@@ -595,7 +595,7 @@ document.body.addEventListener('change', async (e) => {
         if (routeToEdit) {
             // Populate the modal
             document.getElementById('editTransportId').value = routeToEdit._id;
-            document.getElementById('editRouteName').value = routeToEdit.routeName;
+            document.getElementById('editDestination').value = routeToEdit.destination;
             document.getElementById('editTransportType').value = routeToEdit.type;
             document.getElementById('editDepartureTime').value = routeToEdit.departureTime;
             document.getElementById('editTransportPrice').value = routeToEdit.price;

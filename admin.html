@@ -165,17 +165,24 @@
             <div class="tab-pane fade" id="pills-travel" role="tabpanel">
                 <h4>Add New Travel Route</h4>
                 <div class="card card-body mb-4">
-                    <form id="addTransportForm">
-                        <div class="row g-3">
-                            <div class="col-md-6"><input type="text" class="form-control" name="routeName" placeholder="Route Name (e.g., UPES to ISBT)" required></div>
-                            <div class="col-md-6"><select class="form-select" name="type" required><option value="Shuttle">Shuttle</option><option value="Carpool">Carpool</option></select></div>
-                            <div class="col-md-4"><input type="text" class="form-control" name="departureTime" placeholder="Departure Time (e.g., 10:00 AM)" required></div>
-                            <div class="col-md-4"><input type="number" class="form-control" name="price" placeholder="Price" required></div>
-                            <div class="col-md-4"><input type="number" class="form-control" name="capacity" placeholder="Capacity" required></div>
-                            <div class="col-12"><div class="form-check form-switch"><input class="form-check-input" type="checkbox" name="status" value="active" checked><label class="form-check-label">Status: Active</label></div></div>
-                            <div class="col-12 d-grid"><button type="submit" class="btn btn-primary">Add Route</button></div>
-                        </div>
-                    </form>
+<form id="addTransportForm">
+    <div class="row g-3">
+        <div class="col-md-6">
+            <label class="form-label">Destination</label>
+            <select class="form-select" name="destination" required>
+                <option value="ISBT Dehradun">ISBT Dehradun</option>
+                <option value="Dehradun Railway Station">Dehradun Railway Station</option>
+                <option value="Jolly Grant Airport">Jolly Grant Airport</option>
+            </select>
+        </div>
+        <div class="col-md-6"><label class="form-label">Type</label><select class="form-select" name="type" required><option value="Shuttle">Shuttle</option><option value="Carpool">Carpool</option></select></div>
+        <div class="col-md-4"><label class="form-label">Departure Time</label><input type="text" class="form-control" name="departureTime" placeholder="e.g., 10:00 AM" required></div>
+        <div class="col-md-4"><label class="form-label">Price</label><input type="number" class="form-control" name="price" placeholder="Price" required></div>
+        <div class="col-md-4"><label class="form-label">Capacity</label><input type="number" class="form-control" name="capacity" placeholder="Capacity" required></div>
+        <div class="col-12"><div class="form-check form-switch"><input class="form-check-input" type="checkbox" name="status" value="active" checked><label class="form-check-label">Status: Active</label></div></div>
+        <div class="col-12 d-grid"><button type="submit" class="btn btn-primary">Add Route</button></div>
+    </div>
+</form>
                 </div>
                 <h4>Existing Travel Routes</h4>
                 <div class="table-responsive">
@@ -223,18 +230,21 @@
             </div>
         </div>
     </div>
-    <div class="modal fade" id="editTransportModal" tabindex="-1">
+<div class="modal fade" id="editTransportModal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Edit Travel Route</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
+            <div class="modal-header"><h5 class="modal-title">Edit Travel Route</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
             <div class="modal-body">
                 <form id="editTransportForm">
                     <input type="hidden" id="editTransportId" name="transportId">
                     <div class="row g-3">
-                        <div class="col-12"><label class="form-label">Route Name</label><input type="text" id="editRouteName" class="form-control" name="routeName" required></div>
+                        <div class="col-12"><label class="form-label">Destination</label>
+                            <select id="editDestination" class="form-select" name="destination" required>
+                                <option value="ISBT Dehradun">ISBT Dehradun</option>
+                                <option value="Dehradun Railway Station">Dehradun Railway Station</option>
+                                <option value="Jolly Grant Airport">Jolly Grant Airport</option>
+                            </select>
+                        </div>
                         <div class="col-12"><label class="form-label">Type</label><select id="editTransportType" class="form-select" name="type" required><option value="Shuttle">Shuttle</option><option value="Carpool">Carpool</option></select></div>
                         <div class="col-md-4"><label class="form-label">Departure Time</label><input type="text" id="editDepartureTime" class="form-control" name="departureTime" required></div>
                         <div class="col-md-4"><label class="form-label">Price</label><input type="number" id="editTransportPrice" class="form-control" name="price" required></div>

@@ -70,76 +70,51 @@
 <div class="dashboard-content-wrapper">
     <!-- Main Content -->
     <div class="container py-4">
-        <!-- User Profile Section -->
-        <div class="row mb-4">
-            <div class="col-12">
-                <div class="profile-card">
-                    <div class="row align-items-center">
-                        <div class="col-auto">
-                            <div class="profile-avatar">
-                                <img id="profileAvatar" src="assets/male-avatar.svg" alt="Profile" width="80" height="80">
-                            </div>
-                        </div>
-                        <div class="col">
-                            <h3 class="mb-1" id="userName">Loading...</h3>
-                            <p class="text-muted mb-1">SAP ID: <span id="userSapId">Loading...</span></p>
-                            <p class="text-muted mb-1">Email: <span id="userEmail">Loading...</span></p>
-                            <p class="text-muted mb-0">Phone: <span id="userPhone">Loading...</span></p>
-                        </div>
-                        <div class="col-auto">
-                            <div class="referral-code">
-                                <small class="text-muted">Referral Code</small>
-                                <div class="fw-bold" id="referralCode">Loading...</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Trip Section -->
-<div class="row">
-        <div class="col-12">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2 class="display-6 fw-bold text-primary">Upcoming Weekend Trips</h2>
-                </div>
-
-        </div>
-    </div>
-
-
-        <!-- Trip Cards -->
-<div class="row g-4" id="tripsContainer">
-    </div>
-
-<div class="row mt-5">
+<div class="row mb-4">
     <div class="col-12">
+        <div class="profile-card">
+            </div>
+    </div>
+</div>
+
+<ul class="nav nav-pills nav-fill mb-4" id="viewToggle" role="tablist">
+    <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="pills-trips-tab" data-bs-toggle="pill" data-bs-target="#pills-trips-content" type="button" role="tab">
+            <i class="fas fa-suitcase-rolling me-2"></i>Trips
+        </button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="pills-shuttle-tab" data-bs-toggle="pill" data-bs-target="#pills-shuttle-content" type="button" role="tab">
+            <i class="fas fa-bus-alt me-2"></i>Shuttle
+        </button>
+    </li>
+</ul>
+
+<div class="tab-content" id="viewToggleContent">
+    <div class="tab-pane fade show active" id="pills-trips-content" role="tabpanel">
+        <h2 class="display-6 fw-bold text-primary mb-4">Upcoming Weekend Trips</h2>
+        <div class="row g-4" id="tripsContainer">
+            </div>
+    </div>
+
+    <div class="tab-pane fade" id="pills-shuttle-content" role="tabpanel">
         <h2 class="display-6 fw-bold text-primary mb-4">Student Shuttle & Carpool</h2>
         <div class="card card-body shadow-sm">
             <p class="lead">Student Shuttle & Carpool – Fast, Affordable, Direct.</p>
             <p>Say goodbye to the stress of changing 3 vehicles or paying ₹1000+ for a solo cab. With our service, you get direct, pre-booked rides from your college gate straight to ISBT Dehradun, the Railway Station, or Jolly Grant Airport.</p>
-            <h6>🔥 Why Students Love It</h6>
-            <ul>
-                <li><strong>Direct Rides:</strong> No switching vehicles, no bargaining, no delays.</li>
-                <li><strong>Budget Friendly:</strong> Shared fares make rides up to 70% cheaper than a cab.</li>
-                <li><strong>On-Time Guarantee:</strong> Instant cashback if we're delayed by more than 30 mins.</li>
-                <li><strong>Safe & Verified:</strong> All drivers are verified and routes are tracked.</li>
-            </ul>
         </div>
         <div class="row g-4 mt-3" id="transportContainer">
-             </div>
+            </div>
     </div>
 </div>
 
 <div class="row mt-5">
     <div class="col-12">
-        <h2 class="display-6 fw-bold text-primary mb-4">My Trips</h2>
-                <div class="row g-4" id="myTripsContainer">
-                    <!-- User's booked trips will be loaded here -->
-                </div>
+        <h2 class="display-6 fw-bold text-primary mb-4">My Bookings</h2>
+        <div class="row g-4" id="myTripsContainer">
             </div>
-        </div>
     </div>
+</div>
 
     <div class="row mt-5"> ... </div>
 
